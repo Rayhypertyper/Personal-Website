@@ -23,6 +23,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Quicksand:wght@500;600&family=Roboto:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* The dock is static HTML, but its full styling arrives with the app bundle. */
+    .social-dock {
+      visibility: hidden;
+    }
+
+    html[data-app-ready="true"] .social-dock {
+      visibility: visible;
+    }
+  </style>
 </head>
 <body>
   <main>
@@ -37,19 +47,19 @@
 
       <div class="social-dock" aria-label="Social links">
         <a href="https://github.com/Rayhypertyper/" target="_blank" rel="noreferrer" aria-label="GitHub">
-          <svg class="social-icon social-icon-github" viewBox="0 0 24 24" aria-hidden="true">
+          <svg class="social-icon social-icon-github" width="21" height="21" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 .7A11.3 11.3 0 0 0 8.43 22.72c.57.1.78-.25.78-.55v-2.16c-3.18.69-3.85-1.35-3.85-1.35-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.25 3.33.96.1-.74.4-1.25.73-1.54-2.54-.29-5.21-1.27-5.21-5.66 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.11 1.17A10.8 10.8 0 0 1 12 5.93a10.8 10.8 0 0 1 2.83.38c2.15-1.48 3.11-1.17 3.11-1.17.62 1.57.23 2.73.11 3.02.73.8 1.18 1.82 1.18 3.07 0 4.4-2.68 5.36-5.23 5.65.41.36.78 1.05.78 2.12v3.17c0 .3.2.66.79.55A11.3 11.3 0 0 0 12 .7Z"></path>
           </svg>
         </a>
         <span class="social-divider" aria-hidden="true"></span>
         <a href="http://linkedin.com/in/rayxurx" target="_blank" rel="noreferrer" aria-label="LinkedIn">
-          <svg class="social-icon social-icon-linkedin" viewBox="0 0 24 24" aria-hidden="true">
+          <svg class="social-icon social-icon-linkedin" width="21" height="21" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M20.45 3H3.55A.55.55 0 0 0 3 3.55v16.9c0 .3.25.55.55.55h16.9c.3 0 .55-.25.55-.55V3.55A.55.55 0 0 0 20.45 3ZM8.34 18.34H5.67V9.75h2.67v8.59ZM7 8.58a1.55 1.55 0 1 1 0-3.1 1.55 1.55 0 0 1 0 3.1Zm11.34 9.76h-2.66v-4.18c0-1-.02-2.28-1.39-2.28-1.39 0-1.6 1.09-1.6 2.2v4.26h-2.67V9.75h2.56v1.17h.04a2.81 2.81 0 0 1 2.53-1.39c2.7 0 3.2 1.78 3.2 4.1v4.71Z"></path>
           </svg>
         </a>
         <span class="social-divider" aria-hidden="true"></span>
         <a href="mailto:your.email@example.com" aria-label="Email">
-          <svg class="social-icon social-icon-email" viewBox="0 0 24 24" aria-hidden="true">
+          <svg class="social-icon social-icon-email" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
             <rect x="2.75" y="4.75" width="18.5" height="14.5" rx="1.75"></rect>
             <path d="m4.25 7 7.75 6 7.75-6"></path>
           </svg>

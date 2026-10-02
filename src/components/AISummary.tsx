@@ -7,19 +7,13 @@ type OverviewToken = {
 };
 
 const OVERVIEW_TOKENS: readonly OverviewToken[] = [
-  { text: "Ray Xu is a ", strong: false },
-  { text: "Computer Science", strong: true },
-  { text: " student at the ", strong: false },
-  { text: "University of Waterloo", strong: true },
-  { text: " who builds", strong: false, keepTogether: true },
-  { text: " software that solves real problems and makes an impact. He is", strong: false },
-  { text: " passionate about ", strong: false, keepTogether: true },
-  { text: "AI", strong: true },
-  { text: ", ", strong: false },
-  { text: "full stack development", strong: true },
-  { text: ", and ", strong: false },
+  { text: "Ray builds software that makes technology more intuitive to use. His projects pair ", strong: false },
+  { text: "computer vision", strong: true },
+  { text: " and ", strong: false },
   { text: "machine learning", strong: true },
-  { text: ".", strong: false },
+  { text: " with ", strong: false },
+  { text: "full-stack development", strong: true },
+  { text: ", from camera-based input to spatial 3D design.", strong: false },
 ];
 
 const skills = [

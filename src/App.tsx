@@ -26,11 +26,16 @@ export function App() {
   useEffect(() => {
     document.documentElement.dataset.contactPage =
       activeFilter === "Contact" ? "true" : "false";
+    document.documentElement.dataset.projectsPage =
+      activeFilter === "Projects" ? "true" : "false";
+    document.querySelector(".browser-frame")?.scrollTo({ top: 0, behavior: "instant" });
   }, [activeFilter]);
 
   const resultCount =
     activeFilter === "All"
       ? "About 1 result (0.01s)"
+    : activeFilter === "Projects"
+      ? "About 2 results (0.01s)"
     : activeFilter === "Map"
         ? "About 2 locations (0.01s)"
         : activeFilter === "Experience"

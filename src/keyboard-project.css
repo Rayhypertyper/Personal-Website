@@ -1,0 +1,59 @@
+.projects-feature--keyboard .projects-feature__media-frame {
+  position: relative;
+  grid-area: media;
+  align-self: center;
+  padding-block: 64px 72px;
+}
+
+.keyboard-doodles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.keyboard-doodle {
+  position: absolute;
+  display: block;
+  overflow: visible;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.keyboard-doodle__wash {
+  fill: currentColor;
+  fill-opacity: 0.08;
+  stroke: none;
+}
+
+.keyboard-doodle__faint {
+  stroke-dasharray: 3 5;
+  opacity: 0.55;
+}
+
+.keyboard-doodle--webcam {
+  top: -3px;
+  left: calc(8% + 120px);
+  width: 70px;
+  color: #1688ed;
+  transform: rotate(-9deg);
+}
+
+.keyboard-doodle--keys {
+  bottom: -2px;
+  left: 6%;
+  width: 90px;
+  color: #9970d1;
+  transform: rotate(-6deg);
+}
+
+@media (max-width: 639px) {
+  .projects-feature--keyboard .projects-feature__media-frame {
+    padding-block: 52px 62px;
+  }
+
+  .keyboard-doodle--webcam { width: 56px; }
+  .keyboard-doodle--keys { width: 74px; }
+}

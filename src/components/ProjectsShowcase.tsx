@@ -1,124 +1,34 @@
 import {
   ArrowRight,
+  Box,
+  Code2,
   ExternalLink,
   Settings,
 } from "lucide-react";
-import { useRef } from "react";
+import { useRef, type ReactNode } from "react";
 import { PaperPlaneDoodle } from "./PaperPlaneDoodle";
+import { AirCADDoodles } from "./AirCADDoodles";
+import { KeyboardDoodles } from "./KeyboardDoodles";
+import "../projects-motion.css";
+import "../aircad-project.css";
+import "../keyboard-project.css";
 
-const projects = [
-  {
-    title: "DepartCan",
-    slug: "departcan",
-    date: "Feb 2025",
-    description: "Find the fastest border crossing routes with real-time wait times.",
-    kind: "border-map",
-    href: "https://github.com/Rayhypertyper/DepartCan",
-  },
-  {
-    title: "Ingredia",
-    slug: "ingredia",
-    date: "Aug 2025",
-    description: "Scan food labels with OCR, product lookup, and additive flags.",
-    kind: "ingredia",
-    href: "https://github.com/Rayhypertyper/Ingredia",
-  },
-  {
-    title: "Music Recommender",
-    slug: "music-recommender",
-    date: "Nov 2024",
-    description: "Built a content-based music recommender with TF-IDF vectorization to find similar tracks.",
-    kind: "music-dashboard",
-    href: "https://github.com/Rayhypertyper/Music-Recommender",
-  },
-] as const;
-
-type ProjectKind = (typeof projects)[number]["kind"];
-
-function ProjectThumbnail({ kind }: { kind: ProjectKind }) {
-  const isMap = kind.endsWith("map");
-  const isIngredia = kind === "ingredia";
-
-  return (
-    <span className={`project-thumb project-thumb--${kind}`} aria-hidden="true">
-      {isIngredia ? (
-        <>
-          <i className="ingredia-scan-frame" />
-          <i className="ingredia-ring" />
-          <i className="ingredia-leaf ingredia-leaf--one" />
-          <i className="ingredia-leaf ingredia-leaf--two" />
-          <i className="ingredia-label-line ingredia-label-line--one" />
-          <i className="ingredia-label-line ingredia-label-line--two" />
-        </>
-      ) : isMap ? (
-        <>
-          <i className="map-road map-road--one" />
-          <i className="map-road map-road--two" />
-          <i className="map-road map-road--three" />
-          <i className="map-node map-node--one" />
-          <i className="map-node map-node--two" />
-          <i className="map-node map-node--three" />
-          <i className="map-node map-node--four" />
-        </>
-      ) : (
-        <>
-          <i className="dashboard-line dashboard-line--one" />
-          <i className="dashboard-line dashboard-line--two" />
-          <i className="dashboard-line dashboard-line--three" />
-          <i className="dashboard-line dashboard-line--four" />
-          <i className="dashboard-panel" />
-        </>
-      )}
-    </span>
-  );
-}
-
-function TechChip({ kind, children }: { kind: string; children: string }) {
-  const logo = `/featured-${kind}-logo.png`;
-
+function TechChip({ kind, icon, children }: { kind?: string; icon?: ReactNode; children: string }) {
   return (
     <span className="projects-tech-chip">
-      <img className="projects-tech-chip__logo" src={logo} alt="" aria-hidden="true" />
+      {kind ? (
+        <img className="projects-tech-chip__logo" src={`/featured-${kind}-logo.png`} alt="" aria-hidden="true" />
+      ) : icon}
       {children}
     </span>
   );
 }
 
-function ProjectListItem({ project }: { project: (typeof projects)[number] }) {
-  const projectContent = (
-    <>
-      <ProjectThumbnail kind={project.kind} />
-      <span className="projects-list__body">
-        <strong>{project.title}</strong>
-        <small>rayxu.dev&nbsp; / &nbsp;projects&nbsp; /<br />{project.slug}</small>
-        <span>{project.description}</span>
-        <time>{project.date}</time>
-      </span>
-      <ArrowRight className="projects-list__arrow" size={18} strokeWidth={1.7} aria-hidden="true" />
-    </>
-  );
-
-  const projectHref = project.href;
-
-  return (
-    <a
-      className="projects-list__item"
-      href={projectHref}
-      target="_blank"
-      rel="noreferrer"
-      aria-label={`Open ${project.title}`}
-    >
-      {projectContent}
-    </a>
-  );
-}
-
 export function ProjectsShowcase() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const aircadVideoRef = useRef<HTMLVideoElement>(null);
 
-  const playProjectFullscreen = () => {
-    const video = videoRef.current;
-
+  const playProjectFullscreen = (video: HTMLVideoElement | null) => {
     if (!video) {
       return;
     }
@@ -142,7 +52,7 @@ export function ProjectsShowcase() {
 
   return (
     <section className="projects-showcase" aria-label="Featured projects">
-      <article className="projects-feature">
+      <article className="projects-feature projects-feature--keyboard">
         <div className="projects-feature__copy">
           <div className="projects-feature__badge-row">
             <span className="projects-rays projects-rays--left" aria-hidden="true">
@@ -159,16 +69,15 @@ export function ProjectsShowcase() {
           </div>
           <p>An AI-powered system that detects and recognizes keystrokes using only a webcam and deep learning.</p>
           <div className="projects-tech-chips" aria-label="Technologies used">
-            <TechChip kind="python">Python</TechChip>
+            <TechChip kind="numpy">NumPy</TechChip>
             <TechChip kind="pytorch">PyTorch</TechChip>
-            <TechChip kind="opencv">OpenCV</TechChip>
             <TechChip kind="mediapipe">MediaPipe</TechChip>
           </div>
           <div className="projects-feature__actions">
             <button
               type="button"
               className="projects-feature__button"
-              onClick={playProjectFullscreen}
+              onClick={() => playProjectFullscreen(videoRef.current)}
               aria-label="Play Invisible Keyboard project demo in fullscreen"
             >
               <span className="projects-green-arrow" aria-hidden="true" />
@@ -188,19 +97,22 @@ export function ProjectsShowcase() {
           </div>
         </div>
 
-        <div className="projects-feature__media">
-          <video
-            ref={videoRef}
-            className="projects-feature__video"
-            controls
-            playsInline
-            preload="metadata"
-            poster="/invisible-keyboard-demo-poster.jpg"
-            aria-label="Invisible Keyboard project demo"
-          >
-            <source src="/invisible-keyboard-demo.mp4" type="video/mp4" />
-            Your browser does not support embedded video.
-          </video>
+        <div className="projects-feature__media-frame">
+          <KeyboardDoodles />
+          <div className="projects-feature__media">
+            <video
+              ref={videoRef}
+              className="projects-feature__video"
+              controls
+              playsInline
+              preload="metadata"
+              poster="/invisible-keyboard-demo-poster.jpg"
+              aria-label="Invisible Keyboard project demo"
+            >
+              <source src="/invisible-keyboard-demo.mp4" type="video/mp4" />
+              Your browser does not support embedded video.
+            </video>
+          </div>
         </div>
 
         <div className="projects-feature__metrics" aria-label="Project metrics">
@@ -240,11 +152,59 @@ export function ProjectsShowcase() {
 
       <div className="projects-divider" aria-hidden="true" />
 
-      <div className="projects-list">
-        {projects.map((project) => (
-          <ProjectListItem project={project} key={project.slug} />
-        ))}
-      </div>
+      <article className="projects-feature projects-feature--aircad" aria-labelledby="aircad-project-title">
+        <AirCADDoodles />
+        <div className="projects-feature__copy">
+          <div className="projects-feature__title-row">
+            <h2 id="aircad-project-title">AirCAD</h2>
+            <Box className="projects-feature__settings" size={44} strokeWidth={1.5} aria-hidden="true" />
+          </div>
+          <p>A spatial CAD app for sketching and shaping 3D models with a camera-tracked keycap. Draw in space, turn shapes into solids, and export to FreeCAD.</p>
+          <div className="projects-tech-chips" aria-label="AirCAD technologies used">
+            <TechChip icon={<Code2 size={22} strokeWidth={1.7} aria-hidden="true" />}>TypeScript</TechChip>
+            <TechChip kind="python">Python</TechChip>
+            <TechChip icon={<Box size={22} strokeWidth={1.7} aria-hidden="true" />}>FreeCAD</TechChip>
+          </div>
+          <div className="projects-feature__actions">
+            <button
+              type="button"
+              className="projects-feature__button"
+              onClick={() => playProjectFullscreen(aircadVideoRef.current)}
+              aria-label="Play AirCAD project demo in fullscreen"
+            >
+              View Project <ArrowRight size={16} aria-hidden="true" />
+            </button>
+            <a
+              href="https://devpost.com/software/aircad"
+              target="_blank"
+              rel="noreferrer"
+              className="projects-feature__github"
+              aria-label="Open AirCAD project on Devpost"
+            >
+              <img src="/devpost-logo.png" alt="" aria-hidden="true" />
+              <span>Devpost</span>
+              <ExternalLink size={15} aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+
+        <div className="projects-feature__media-frame">
+          <div className="projects-feature__media">
+            <video
+              ref={aircadVideoRef}
+              className="projects-feature__video"
+              controls
+              playsInline
+              preload="metadata"
+              poster="/aircad-demo-poster.jpg"
+              aria-label="AirCAD project demo"
+            >
+              <source src="/aircad-demo.mp4" type="video/mp4" />
+              Your browser does not support embedded video. <a href="/aircad-demo.mp4">Watch the AirCAD demo.</a>
+            </video>
+          </div>
+        </div>
+      </article>
     </section>
   );
 }

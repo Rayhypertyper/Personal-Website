@@ -403,7 +403,7 @@ button:disabled {
 }
 
 /* Waterloo's black, red, and gold palette for the first result. */
-.search-panel .result-card--waterloo {
+.search-panel .result-card--aircad {
   grid-template-columns: 68px minmax(0, 1fr);
   min-height: 168px;
   column-gap: 24px;
@@ -419,39 +419,39 @@ button:disabled {
     0 0 0 1px rgba(234, 171, 0, 0.12);
 }
 
-.search-panel .result-card--waterloo > span:first-child {
+.search-panel .result-card--aircad > span:first-child {
   width: 68px;
   height: 68px;
   font-size: 28px;
 }
 
-.search-panel .result-card--waterloo .result-title {
+.search-panel .result-card--aircad .result-title {
   font-size: 27px;
   line-height: 1.12;
 }
 
-.search-panel .result-card--waterloo .result-card-sponsored {
+.search-panel .result-card--aircad .result-card-sponsored {
   margin-bottom: 8px;
   padding: 5px 10px;
   font-size: 12px;
 }
 
-.search-panel .result-card--waterloo .result-card-url {
+.search-panel .result-card--aircad .result-card-url {
   margin-top: 5px;
   font-size: 16px;
 }
 
-.search-panel .result-card--waterloo .result-card-description {
+.search-panel .result-card--aircad .result-card-description {
   margin-top: 14px;
   font-size: 18px;
 }
 
-.search-panel .result-card--waterloo > span:last-child {
+.search-panel .result-card--aircad > span:last-child {
   width: 82px;
   height: 66px;
 }
 
-.search-panel .result-card--waterloo:hover {
+.search-panel .result-card--aircad:hover {
   border-color: rgba(234, 171, 0, 0.65);
   box-shadow:
     inset 4px 0 0 #eaab00,
@@ -459,7 +459,7 @@ button:disabled {
     0 0 0 2px rgba(234, 171, 0, 0.14);
 }
 
-.search-panel .result-card--waterloo .result-title {
+.search-panel .result-card--aircad .result-title {
   color: #000000;
 }
 
@@ -481,15 +481,15 @@ button:disabled {
   text-transform: uppercase;
 }
 
-.search-panel .result-card--waterloo .result-card-url {
+.search-panel .result-card--aircad .result-card-url {
   color: #782434;
 }
 
-.search-panel .result-card--waterloo .result-card-description {
+.search-panel .result-card--aircad .result-card-description {
   color: #5d481b;
 }
 
-.search-panel .result-card--waterloo > span:last-child {
+.search-panel .result-card--aircad > span:last-child {
   border-color: rgba(234, 171, 0, 0.42);
   color: #8a6500;
 }
@@ -3258,80 +3258,44 @@ html[data-contact-page="true"] .social-dock {
   text-align: center;
 }
 
-.contact-comet {
+.contact-project-doodles {
   position: absolute;
   z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.contact-project-doodle {
+  position: absolute;
+  display: block;
+  overflow: visible;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.contact-project-doodle__wash {
+  fill: currentColor;
+  fill-opacity: 0.08;
+  stroke: none;
+}
+
+.contact-project-doodle--comet {
   top: 138px;
   right: 194px;
-  width: 94px;
-  height: 28px;
-  opacity: 0.45;
-  transform: rotate(-31deg);
-  pointer-events: none;
+  width: 62px;
+  color: #cc795e;
+  transform: rotate(-7deg);
 }
 
-.contact-comet::before,
-.contact-comet::after,
-.contact-comet i::before {
-  position: absolute;
-  top: 13px;
-  right: 0;
-  width: 88px;
-  height: 1px;
-  content: "";
-  background: linear-gradient(90deg, transparent, rgba(165, 133, 89, 0.55));
-  transform-origin: right center;
-}
-
-.contact-comet::after {
-  transform: rotate(4deg);
-}
-
-.contact-comet i::before {
-  transform: rotate(-4deg);
-}
-
-.contact-comet i::after {
-  position: absolute;
-  top: 9px;
-  right: -2px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  content: "";
-  background: #bda77f;
-  box-shadow: 0 0 7px rgba(167, 136, 91, 0.36);
-}
-
-.contact-decor-planet {
-  position: absolute;
-  z-index: 2;
+.contact-project-doodle--planet {
   bottom: 137px;
-  left: -18px;
-  width: 127px;
-  height: 35px;
-  border: 1px solid rgba(147, 122, 86, 0.34);
-  border-radius: 50%;
-  opacity: 0.52;
-  transform: rotate(16deg);
-  pointer-events: none;
-  box-shadow:
-    inset 0 0 0 7px rgba(248, 243, 232, 0.85),
-    inset 0 0 0 8px rgba(152, 126, 90, 0.21),
-    inset 0 0 0 13px rgba(248, 243, 232, 0.74),
-    inset 0 0 0 14px rgba(152, 126, 90, 0.2);
-}
-
-.contact-decor-planet::before {
-  position: absolute;
-  top: 7px;
-  left: 35px;
-  width: 53px;
-  height: 20px;
-  border-radius: 50%;
-  content: "";
-  background: radial-gradient(ellipse at 37% 30%, #eee7d8, #c4b59c 57%, #8d7e67);
-  box-shadow: inset -5px -4px 5px rgba(91, 73, 49, 0.18);
+  left: 12px;
+  width: 78px;
+  color: #9970d1;
+  transform: rotate(-14deg);
 }
 
 .contact-nebula {
@@ -3421,7 +3385,7 @@ html[data-contact-page="true"] .social-dock {
     width: 122px;
   }
 
-  .contact-comet {
+  .contact-project-doodle--comet {
     right: 34px;
   }
 }
@@ -3502,16 +3466,16 @@ html[data-contact-page="true"] .social-dock {
     font-size: 8.8px;
   }
 
-  .contact-comet {
+  .contact-project-doodle--comet {
     top: 448px;
     right: 19px;
-    transform: rotate(-28deg) scale(0.75);
+    width: 44px;
   }
 
-  .contact-decor-planet {
+  .contact-project-doodle--planet {
     bottom: 12px;
-    transform: rotate(16deg) scale(0.8);
-    transform-origin: left bottom;
+    left: 8px;
+    width: 52px;
   }
 
   .contact-asteroids--one {
@@ -4670,7 +4634,7 @@ html[data-contact-page="true"] .social-dock {
   }
 
   .projects-feature__media {
-    align-self: end;
+    align-self: center;
   }
 
   .projects-divider {
@@ -5513,7 +5477,7 @@ html[data-theme="dark"] .result-card .result-title {
   color: #a9ccff !important;
 }
 
-html[data-theme="dark"] .search-panel .result-card--waterloo {
+html[data-theme="dark"] .search-panel .result-card--aircad {
   border-color: rgba(254, 211, 76, 0.42) !important;
   background:
     linear-gradient(110deg, rgba(254, 211, 76, 0.12), transparent 56%),
@@ -5524,7 +5488,7 @@ html[data-theme="dark"] .search-panel .result-card--waterloo {
     0 0 0 1px rgba(254, 211, 76, 0.1) !important;
 }
 
-html[data-theme="dark"] .search-panel .result-card--waterloo:hover {
+html[data-theme="dark"] .search-panel .result-card--aircad:hover {
   border-color: rgba(254, 211, 76, 0.62) !important;
   box-shadow:
     inset 4px 0 0 #fed34c,
@@ -5532,7 +5496,7 @@ html[data-theme="dark"] .search-panel .result-card--waterloo:hover {
     0 0 0 2px rgba(254, 211, 76, 0.16) !important;
 }
 
-html[data-theme="dark"] .search-panel .result-card--waterloo .result-title {
+html[data-theme="dark"] .search-panel .result-card--aircad .result-title {
   color: #fed34c !important;
 }
 
@@ -5543,15 +5507,15 @@ html[data-theme="dark"] .search-panel .result-card-sponsored {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
 }
 
-html[data-theme="dark"] .search-panel .result-card--waterloo .result-card-url {
+html[data-theme="dark"] .search-panel .result-card--aircad .result-card-url {
   color: #e10054 !important;
 }
 
-html[data-theme="dark"] .search-panel .result-card--waterloo .result-card-description {
+html[data-theme="dark"] .search-panel .result-card--aircad .result-card-description {
   color: #f1ede3 !important;
 }
 
-html[data-theme="dark"] .search-panel .result-card--waterloo > span:last-child {
+html[data-theme="dark"] .search-panel .result-card--aircad > span:last-child {
   border-color: rgba(254, 211, 76, 0.36) !important;
   color: #fed34c !important;
 }
@@ -6086,11 +6050,11 @@ main {
   font-size: clamp(15px, 1.15vw, 18px);
 }
 
-.search-panel .result-card--waterloo .result-title {
+.search-panel .result-card--aircad .result-title {
   font-size: clamp(23px, 1.95vw, 27px);
 }
 
-.search-panel .result-card--waterloo .result-card-description {
+.search-panel .result-card--aircad .result-card-description {
   font-size: clamp(16px, 1.3vw, 18px);
 }
 
@@ -6283,7 +6247,7 @@ main {
     font-size: clamp(18px, 2.2vw, 23px);
   }
 
-  .search-panel .result-card--waterloo .result-title {
+  .search-panel .result-card--aircad .result-title {
     font-size: clamp(20px, 2.3vw, 24px);
   }
 
@@ -6291,7 +6255,7 @@ main {
     font-size: clamp(13px, 1.7vw, 16px);
   }
 
-  .search-panel .result-card--waterloo .result-card-description {
+  .search-panel .result-card--aircad .result-card-description {
     font-size: clamp(14px, 1.8vw, 16px);
   }
 
@@ -6383,12 +6347,12 @@ main {
     font-size: clamp(16px, 4.5vw, 19px);
   }
 
-  .search-panel .result-card--waterloo .result-title {
+  .search-panel .result-card--aircad .result-title {
     font-size: clamp(17px, 4.8vw, 20px);
   }
 
   .search-panel .result-card-url,
-  .search-panel .result-card--waterloo .result-card-url {
+  .search-panel .result-card--aircad .result-card-url {
     font-size: clamp(11px, 3.2vw, 13px);
   }
 
@@ -6396,7 +6360,7 @@ main {
     font-size: clamp(12px, 3.5vw, 14px);
   }
 
-  .search-panel .result-card--waterloo .result-card-description {
+  .search-panel .result-card--aircad .result-card-description {
     font-size: clamp(12.5px, 3.7vw, 14.5px);
   }
 
@@ -6406,7 +6370,7 @@ main {
     font-size: 9px;
   }
 
-  .search-panel .result-card--waterloo > span:first-child {
+  .search-panel .result-card--aircad > span:first-child {
     font-size: 22px;
   }
 

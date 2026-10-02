@@ -19,8 +19,11 @@ export function AllOverview({ onProjectsClick }: AllOverviewProps) {
       <div className="all-overview__main">
         <div className="all-overview__introduction">
           <h1 className="all-overview__name">
-            Ray Xu<span aria-hidden="true">.</span>
+            Ray Xu
           </h1>
+          <p className="all-overview__subtitle">
+            Computer Science @ University of Waterloo
+          </p>
           <AISummary />
         </div>
 
@@ -46,8 +49,8 @@ export function AllOverview({ onProjectsClick }: AllOverviewProps) {
           <div className="all-project__details">
             <h2 id="all-project-title">Invisible Keyboard</h2>
             <p>
-              An AI-powered system that detects and recognizes keystrokes using
-              only a webcam and deep learning.
+              An end-to-end machine learning project that detects and recognizes
+              keystrokes using only a webcam
             </p>
             <button
               className="all-project__link"
@@ -62,7 +65,7 @@ export function AllOverview({ onProjectsClick }: AllOverviewProps) {
       </div>
 
       <div className="all-overview__education">
-        <SearchResultCard compact sponsored variant="waterloo" />
+        <SearchResultCard compact sponsored variant="aircad" />
       </div>
     </div>
   );

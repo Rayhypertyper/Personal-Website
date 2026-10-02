@@ -12,6 +12,7 @@ import {
   type FormEvent,
   type ReactNode,
 } from "react";
+import { ContactDoodles } from "./ContactDoodles";
 
 type OrbitName = "email" | "linkedin" | "github" | "schedule" | "resume";
 
@@ -2814,10 +2815,7 @@ export function ContactSection({
         ))}
       </div>
 
-      <div className="contact-comet" aria-hidden="true">
-        <i />
-      </div>
-      <div className="contact-decor-planet" aria-hidden="true" />
+      <ContactDoodles />
       <div className="contact-nebula contact-nebula--left" aria-hidden="true" />
       <div className="contact-nebula contact-nebula--right" aria-hidden="true" />
       <canvas ref={smokeCanvasRef} className="contact-smoke-canvas" aria-hidden="true" />

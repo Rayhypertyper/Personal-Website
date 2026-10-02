@@ -59,3 +59,5 @@ createRoot(root).render(
     <App />
   </StrictMode>,
 );
+
+document.documentElement.dataset.appReady = "true";
