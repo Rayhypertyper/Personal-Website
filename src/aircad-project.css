@@ -42,6 +42,25 @@ html[data-projects-page="true"] .search-panel {
   margin-top: 0;
 }
 
+.aircad-recognition {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: #a85b3d;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.aircad-recognition > svg {
+  flex-shrink: 0;
+}
+
+html[data-theme="dark"] .aircad-recognition {
+  color: #f0ad88;
+}
+
 .projects-feature--aircad .projects-feature__media-frame {
   position: relative;
   grid-area: media;

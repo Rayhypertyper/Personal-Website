@@ -4,8 +4,11 @@ import {
   Code2,
   ExternalLink,
   Settings,
+  Trophy,
 } from "lucide-react";
 import { useRef, type ReactNode } from "react";
+import { TourPageText } from "./TourPageText";
+import { TOUR_READING_CHARACTERS_PER_SECOND } from "../tour-config";
 import { PaperPlaneDoodle } from "./PaperPlaneDoodle";
 import { AirCADDoodles } from "./AirCADDoodles";
 import { KeyboardDoodles } from "./KeyboardDoodles";
@@ -52,7 +55,7 @@ export function ProjectsShowcase() {
 
   return (
     <section className="projects-showcase" aria-label="Featured projects">
-      <article className="projects-feature projects-feature--keyboard">
+      <article className="projects-feature projects-feature--keyboard" data-tour-target="keyboard">
         <div className="projects-feature__copy">
           <div className="projects-feature__badge-row">
             <span className="projects-rays projects-rays--left" aria-hidden="true">
@@ -64,10 +67,10 @@ export function ProjectsShowcase() {
             </span>
           </div>
           <div className="projects-feature__title-row">
-            <h2>Invisible Keyboard</h2>
+            <h2 data-tour-focus-block="keyboard-intro"><TourPageText>Invisible Keyboard</TourPageText></h2>
             <Settings className="projects-feature__settings" size={48} strokeWidth={1.5} aria-hidden="true" />
           </div>
-          <p>An AI-powered system that detects and recognizes keystrokes using only a webcam and deep learning.</p>
+          <p data-tour-focus-block="keyboard-intro"><TourPageText cps={20} endCps={36} holdMs={200}>An end-to-end machine learning system that <strong>detects and recognizes keystrokes using a webcam</strong></TourPageText></p>
           <div className="projects-tech-chips" aria-label="Technologies used">
             <TechChip kind="numpy">NumPy</TechChip>
             <TechChip kind="pytorch">PyTorch</TechChip>
@@ -115,8 +118,8 @@ export function ProjectsShowcase() {
           </div>
         </div>
 
-        <div className="projects-feature__metrics" aria-label="Project metrics">
-          <div className="projects-metric">
+        <div className="projects-feature__metrics" aria-label="Project metrics" data-tour-metrics>
+          <div className="projects-metric" data-tour-focus-block="keyboard-precision">
             <span className="projects-metric__icon projects-metric__icon--green">
               <img
                 className="projects-metric__precision-icon"
@@ -125,9 +128,10 @@ export function ProjectsShowcase() {
                 aria-hidden="true"
               />
             </span>
-            <strong>95.6%</strong><small>Press Precision</small>
+            <strong><TourPageText count={{ value: 95.6, decimals: 1, suffix: "%" }}>95.6%</TourPageText></strong>
+            <small><TourPageText>Press Precision</TourPageText></small>
           </div>
-          <div className="projects-metric">
+          <div className="projects-metric" data-tour-focus-block="keyboard-recall">
             <span className="projects-metric__icon projects-metric__icon--blue">
               <img
                 className="projects-metric__recall-icon"
@@ -136,13 +140,15 @@ export function ProjectsShowcase() {
                 aria-hidden="true"
               />
             </span>
-            <strong>95.7%</strong><small>Recall</small>
+            <strong><TourPageText count={{ value: 95.7, decimals: 1, suffix: "%" }}>95.7%</TourPageText></strong>
+            <small><TourPageText>Recall</TourPageText></small>
           </div>
-          <div className="projects-metric">
+          <div className="projects-metric" data-tour-focus-block="keyboard-fps">
             <span className="projects-metric__icon projects-metric__icon--speed">
               <img src="/typing-speed-symbol.png" alt="" aria-hidden="true" />
             </span>
-            <strong>80 Words Per Minute</strong><small>Speed</small>
+            <strong><TourPageText count={{ value: 24, suffix: " FPS" }}>24 FPS</TourPageText></strong>
+            <small><TourPageText>Real-time inference</TourPageText></small>
           </div>
           <div className="projects-feature__doodle" aria-hidden="true">
             <PaperPlaneDoodle />
@@ -152,14 +158,18 @@ export function ProjectsShowcase() {
 
       <div className="projects-divider" aria-hidden="true" />
 
-      <article className="projects-feature projects-feature--aircad" aria-labelledby="aircad-project-title">
+      <article className="projects-feature projects-feature--aircad" aria-labelledby="aircad-project-title" data-tour-target="aircad">
         <AirCADDoodles />
         <div className="projects-feature__copy">
           <div className="projects-feature__title-row">
-            <h2 id="aircad-project-title">AirCAD</h2>
+            <h2 id="aircad-project-title" data-tour-focus-block="aircad-intro"><TourPageText>AirCAD</TourPageText></h2>
             <Box className="projects-feature__settings" size={44} strokeWidth={1.5} aria-hidden="true" />
           </div>
-          <p>A spatial CAD app for sketching and shaping 3D models with a camera-tracked keycap. Draw in space, turn shapes into solids, and export to FreeCAD.</p>
+          <div className="aircad-recognition" data-tour-focus-block="aircad-intro">
+            <Trophy size={16} strokeWidth={1.7} aria-hidden="true" />
+            <span>Hack the North 2026 Semifinalist</span>
+          </div>
+          <p data-tour-focus-block="aircad-intro"><TourPageText cps={TOUR_READING_CHARACTERS_PER_SECOND} holdMs={400}>A hand gesture and pen controlled CAD app</TourPageText></p>
           <div className="projects-tech-chips" aria-label="AirCAD technologies used">
             <TechChip icon={<Code2 size={22} strokeWidth={1.7} aria-hidden="true" />}>TypeScript</TechChip>
             <TechChip kind="python">Python</TechChip>
@@ -193,6 +203,10 @@ export function ProjectsShowcase() {
             <video
               ref={aircadVideoRef}
               className="projects-feature__video"
+              onLoadedMetadata={(event) => {
+                event.currentTarget.defaultPlaybackRate = 1.65;
+                event.currentTarget.playbackRate = 1.65;
+              }}
               controls
               playsInline
               preload="metadata"

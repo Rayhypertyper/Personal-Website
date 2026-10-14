@@ -1,3 +1,7 @@
+import { useLayoutEffect, useRef, useState } from "react";
+
+import { TOUR_OVERHAUL_ENABLED } from "../tour-config";
+
 export const FILTERS = [
   "All",
   "Projects",
@@ -20,11 +24,19 @@ export function FilterTabs({
   onFilterChange,
   resultCount = "About 5 results (0.01s)",
 }: FilterTabsProps) {
+  const previous = useRef(FILTERS.indexOf(activeFilter));
+  const [direction, setDirection] = useState("forward");
+  useLayoutEffect(() => {
+    const index = FILTERS.indexOf(activeFilter);
+    if (index !== previous.current) setDirection(index > previous.current ? "forward" : "backward");
+    previous.current = index;
+  }, [activeFilter]);
   return (
     <div className="filter-tabs relative z-20 mt-7">
       <div className="filters-scroll">
         <div
           className="flex flex-wrap items-start gap-x-8 gap-y-5 px-1 sm:min-w-max sm:flex-nowrap sm:gap-11 sm:px-2 lg:gap-[54px] lg:px-3"
+          data-direction={TOUR_OVERHAUL_ENABLED ? direction : undefined}
           role="tablist"
           aria-label="Search categories"
         >

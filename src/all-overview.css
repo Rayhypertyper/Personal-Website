@@ -76,7 +76,7 @@ main:has(.all-search-panel),
   letter-spacing: -0.055em;
 }
 
-.all-overview__name > span {
+.all-overview__name > span:not(.tour-page-text) {
   color: var(--all-accent);
 }
 
@@ -392,7 +392,7 @@ html[data-theme="dark"] .search-panel.all-search-panel {
     animation: all-name-enter 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
-  .all-overview__name > span {
+  .all-overview__name > span:not(.tour-page-text) {
     display: inline-block;
     transform-origin: 50% 85%;
     animation: all-period-enter 360ms cubic-bezier(0.16, 1, 0.3, 1) 220ms both;
@@ -415,7 +415,7 @@ html[data-theme="dark"] .search-panel.all-search-panel {
 
   /* Keyboard interaction immediately clears any entrance still in progress. */
   .all-overview:focus-within .all-overview__name,
-  .all-overview:focus-within .all-overview__name > span,
+  .all-overview:focus-within .all-overview__name > span:not(.tour-page-text),
   .all-overview:focus-within .all-overview__subtitle,
   .all-overview:focus-within .ai-overview,
   .all-overview:focus-within .all-project,
@@ -656,6 +656,10 @@ html[data-theme="dark"] .all-search-panel .result-card--aircad > span:last-child
     min-height: 0;
   }
 
+  .all-overview:has(.tour-cta) {
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
   .all-overview__main {
     height: 100%;
     min-height: 0;
@@ -768,7 +772,80 @@ html[data-theme="dark"] .all-search-panel .result-card--aircad > span:last-child
 
 }
 
+@media (min-width: 768px) and (min-height: 651px) and (max-height: 940px) {
+  .all-search-panel .search-results-stack.all-results:has(.tour-cta) {
+    margin-top: clamp(6px, 1.4svh, 22px);
+  }
+
+  .all-overview:has(.tour-cta) .tour-cta {
+    margin-bottom: clamp(6px, 1.2svh, 10px);
+  }
+
+  .all-overview:has(.tour-cta) .all-overview__main {
+    padding-bottom: clamp(8px, 2svh, 28px);
+  }
+
+  .all-overview:has(.tour-cta) .ai-overview__skills {
+    margin-top: clamp(12px, 2.2svh, 27px);
+  }
+
+  .all-overview:has(.tour-cta) .ai-overview__copy {
+    margin-top: clamp(8px, 1.3svh, 14px);
+  }
+
+  .all-overview:has(.tour-cta) .all-overview__education {
+    padding-top: clamp(8px, 1.8svh, 24px);
+  }
+
+  .all-search-panel .all-overview:has(.tour-cta) .all-overview__education .result-card--aircad {
+    min-height: clamp(70px, 10svh, 120px);
+    padding-block: clamp(8px, 1.6svh, 22px);
+  }
+
+  .all-search-panel .all-overview:has(.tour-cta) .all-overview__education .result-card--aircad > span:first-child {
+    width: clamp(40px, 6svh, 54px);
+    height: clamp(40px, 6svh, 54px);
+  }
+
+  .all-search-panel .all-overview:has(.tour-cta) .all-overview__education .result-card--aircad > span:last-child {
+    width: clamp(34px, 5svh, 42px);
+    height: clamp(34px, 5svh, 42px);
+  }
+
+  .all-overview:has(.tour-cta) .all-project {
+    width: min(100%, 42svh);
+  }
+
+  .all-overview:has(.tour-cta) .all-project__details {
+    padding-top: clamp(8px, 1.6svh, 20px);
+  }
+
+  .all-overview:has(.tour-cta) .all-project__details p {
+    margin-block: clamp(5px, 0.9svh, 10px);
+  }
+}
+
 @media (min-width: 768px) and (max-height: 650px) {
+  .all-search-panel .search-results-stack.all-results:has(.tour-cta) {
+    margin-top: 6px;
+  }
+
+  .all-overview:has(.tour-cta) .tour-cta {
+    margin-bottom: 6px;
+  }
+
+  .all-overview:has(.tour-cta) .all-project {
+    width: min(100%, 36svh);
+  }
+
+  .all-overview:has(.tour-cta) .all-project__details {
+    padding-top: 6px;
+  }
+
+  .all-overview:has(.tour-cta) .all-project__details p {
+    margin-block: 3px;
+  }
+
   .all-overview__main {
     padding-bottom: 12px;
   }
@@ -828,6 +905,14 @@ html[data-theme="dark"] .all-search-panel .result-card--aircad > span:last-child
 }
 
 @media (min-width: 768px) and (max-height: 575px) {
+  .all-overview:has(.tour-cta) .all-project {
+    width: min(100%, 35svh);
+  }
+
+  .all-overview:has(.tour-cta) .all-project__details {
+    padding-top: 4px;
+  }
+
   .all-search-panel .search-panel__inner {
     padding-bottom: 80px;
   }

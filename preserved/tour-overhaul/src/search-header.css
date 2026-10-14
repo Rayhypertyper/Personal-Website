@@ -1,0 +1,366 @@
+/* Canonical geometry extracted unchanged from the All / hero layout.
+   Shared by every filter; content sizing and scrolling remain page-specific. */
+.browser-frame:has(.search-header),
+.search-panel:has(.search-header) {
+  border: 0;
+}
+.search-panel .search-panel__inner {
+  max-width: 1500px;
+  padding-top: clamp(24px, 2.5vw, 36px);
+}
+/* Preserve the original sibling/flex layout without adding a sizing box. */
+.search-header { display: contents; }
+@media (max-width: 767px) {
+  .search-panel .search-panel__inner {
+    padding-top: 20px;
+    padding-inline: 24px;
+  }
+}
+@media (max-width: 380px) {
+  .search-panel .search-panel__inner { padding-inline: 18px; }
+}
+@media (min-width: 768px) {
+  .search-panel .search-panel__inner {
+    padding-top: clamp(8px, 2.4svh, 24px);
+  }
+}
+@media (min-width: 768px) and (max-height: 575px) {
+  .search-panel .search-panel__inner { padding-top: 8px; }
+}
+@media (max-width: 767px) {
+  .search-header .filters-scroll {
+    overflow-x: auto;
+    padding: 4px;
+    margin: -4px;
+    scrollbar-width: none;
+  }
+  .search-header [role="tablist"] {
+    flex-wrap: nowrap;
+    min-width: max-content;
+    gap: 16px;
+  }
+}
+@media (min-width: 768px) {
+  .search-header .search-bar {
+    flex: 0 0 auto;
+    height: clamp(58px, 9svh, 86px);
+  }
+  .search-header .search-bar > svg {
+    width: clamp(25px, 3.7svh, 34px);
+    height: clamp(25px, 3.7svh, 34px);
+  }
+  .search-header .search-bar input {
+    font-size: clamp(22px, min(2.45vw, 4svh), 38px);
+  }
+  .search-header .search-bar__submit {
+    width: clamp(44px, 7svh, 64px);
+    height: clamp(44px, 7svh, 64px);
+  }
+  .search-header .filter-tabs {
+    flex: 0 0 auto;
+    margin-top: clamp(10px, 2svh, 20px);
+  }
+  .search-header .filter-tab {
+    padding-bottom: clamp(8px, 1.35svh, 13px);
+  }
+  .search-header .filter-result-count {
+    position: absolute;
+    top: 0;
+    right: clamp(0px, 4vw, 62px);
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+  }
+}
+@media (min-width: 768px) and (max-height: 575px) {
+  .search-header .search-bar {
+    height: 50px;
+  }
+  .search-header .search-bar > svg {
+    width: 22px;
+    height: 22px;
+  }
+  .search-header .search-bar__submit {
+    width: 40px;
+    height: 40px;
+  }
+  .search-header .filter-tabs {
+    margin-top: 6px;
+  }
+  .search-header .filter-tab {
+    padding-bottom: 6px;
+    font-size: 14px;
+  }
+}
+
+@property --search-halo-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.halo-search-input {
+  position: relative;
+  isolation: isolate;
+  transition: box-shadow 240ms ease, border-color 240ms ease;
+}
+
+.halo-search-input::before {
+  position: absolute;
+  z-index: 1;
+  inset: -1px;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--search-halo-angle),
+    transparent 0deg 34deg,
+    rgba(224, 145, 111, 0.08) 70deg,
+    rgba(211, 125, 91, 0.85) 118deg,
+    rgba(238, 191, 151, 0.66) 154deg,
+    transparent 202deg 260deg,
+    rgba(187, 141, 157, 0.66) 308deg,
+    transparent 348deg
+  );
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  transition: opacity 220ms ease;
+}
+
+.halo-search-input:focus-within {
+  border-color: rgba(196, 111, 76, 0.42);
+  box-shadow:
+    0 13px 30px rgba(49, 42, 35, 0.09),
+    0 0 0 4px rgba(196, 111, 76, 0.075),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+.halo-search-input:focus-within::before {
+  opacity: 0.9;
+  animation: search-bar-halo-orbit 8s linear infinite;
+}
+
+.halo-search-input[data-loading="true"]::before {
+  opacity: 0.94;
+  animation: search-bar-halo-orbit 2.6s linear infinite;
+}
+
+.search-bar__effects {
+  position: absolute;
+  z-index: 0;
+  inset: 1px;
+  overflow: hidden;
+  border-radius: inherit;
+  opacity: 0.2;
+  pointer-events: none;
+  transition: opacity 360ms ease;
+}
+
+.search-bar__effects::before,
+.search-bar__effects::after {
+  position: absolute;
+  top: -78%;
+  width: 38%;
+  height: 256%;
+  border-radius: 50%;
+  content: "";
+  filter: blur(24px);
+}
+
+.search-bar__effects::before {
+  left: 12%;
+  background: radial-gradient(ellipse, rgba(239, 180, 148, 0.84), transparent 67%);
+}
+
+.search-bar__effects::after {
+  right: 7%;
+  background: radial-gradient(ellipse, rgba(219, 182, 170, 0.68), transparent 69%);
+}
+
+.halo-search-input:focus-within .search-bar__effects {
+  opacity: 0.82;
+}
+
+.halo-search-input:focus-within .search-bar__effects::before {
+  animation: search-bar-focus-drift 5.2s ease-in-out infinite alternate;
+}
+
+.halo-search-input:focus-within .search-bar__effects::after {
+  animation: search-bar-focus-drift 6.4s ease-in-out -1.6s infinite alternate-reverse;
+}
+
+.halo-search-input[data-loading="true"] .search-bar__effects {
+  opacity: 0.8;
+}
+
+.halo-search-input[data-loading="true"] .search-bar__effects::before {
+  animation: search-bar-blob-breathe 1.45s ease-in-out infinite alternate;
+}
+
+.halo-search-input[data-loading="true"] .search-bar__effects::after {
+  animation: search-bar-blob-breathe 1.8s ease-in-out -520ms infinite alternate-reverse;
+}
+
+.halo-search-input[data-clearing="true"] .search-bar__effects {
+  opacity: 0.76;
+}
+
+.halo-search-input[data-clearing="true"] .search-bar__effects::before {
+  animation: search-bar-clear-pulse 260ms ease-out both;
+}
+
+.halo-search-input[data-clearing="true"] .search-bar__effects::after {
+  animation: search-bar-clear-pulse 260ms 35ms ease-out both;
+}
+
+.halo-search-input > .halo-search-input__icon,
+.halo-search-input__field,
+.halo-search-input__clear {
+  position: relative;
+  z-index: 2;
+}
+
+.halo-search-input__field {
+  position: relative;
+  line-height: 1;
+}
+
+.halo-search-input__field input {
+  display: block;
+}
+
+.halo-search-input[data-loading="true"] .halo-search-input__field input {
+  color: transparent !important;
+  caret-color: transparent !important;
+  -webkit-text-fill-color: transparent;
+}
+
+.halo-search-input__loading {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  overflow: hidden;
+  color: #8f422b;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  white-space: nowrap;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.halo-search-input__loading-char {
+  display: inline-block;
+  min-width: 0.04em;
+  animation-name: search-bar-character-arrive;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation-fill-mode: both;
+}
+
+.halo-search-input__clear {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #7d8390;
+  cursor: pointer;
+}
+
+.halo-search-input__clear svg {
+  width: 18px;
+  height: 18px;
+}
+
+.halo-search-input__clear:hover {
+  color: #8f422b;
+}
+
+.halo-search-input[data-translucent="true"] {
+  background-color: rgba(255, 255, 255, 0.74);
+}
+
+html[data-theme="dark"] .halo-search-input__icon {
+  color: #aacaff !important;
+}
+
+html[data-theme="dark"] .halo-search-input__clear {
+  color: #9fb4d1;
+}
+
+html[data-theme="dark"] .halo-search-input__clear:hover {
+  color: #f2b39a;
+  background: rgba(196, 111, 76, 0.18);
+}
+
+html[data-theme="dark"] .halo-search-input[data-translucent="true"] {
+  background-color: rgba(17, 31, 55, 0.72) !important;
+}
+
+@keyframes search-bar-halo-orbit {
+  to { --search-halo-angle: 360deg; }
+}
+
+@keyframes search-bar-character-arrive {
+  from { opacity: 0; filter: blur(4px); transform: translateY(0.34em); }
+  68% { opacity: 1; filter: blur(0); transform: translateY(-0.05em); }
+  to { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+
+@keyframes search-bar-focus-drift {
+  from { transform: translate3d(-10%, 0, 0) scale(0.86); }
+  to { transform: translate3d(13%, 0, 0) scale(1.14); }
+}
+
+@keyframes search-bar-blob-breathe {
+  from { transform: translate3d(-8%, 0, 0) scale(0.8); }
+  to { transform: translate3d(12%, 0, 0) scale(1.18); }
+}
+
+@keyframes search-bar-clear-pulse {
+  from { opacity: 0.25; transform: scale(0.7); }
+  55% { opacity: 1; }
+  to { opacity: 0.65; transform: scale(1.16); }
+}
+
+@media (max-width: 639px) {
+  .halo-search-input__clear {
+    width: 20px;
+    height: 20px;
+  }
+
+  .halo-search-input__clear svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .halo-search-input,
+  .search-bar__effects,
+  .halo-search-input::before,
+  .halo-search-input__clear {
+    transition-duration: 0.01ms;
+  }
+
+  .halo-search-input:focus-within::before,
+  .halo-search-input:focus-within .search-bar__effects::before,
+  .halo-search-input:focus-within .search-bar__effects::after,
+  .halo-search-input[data-loading="true"]::before,
+  .halo-search-input[data-loading="true"] .search-bar__effects::before,
+  .halo-search-input[data-loading="true"] .search-bar__effects::after,
+  .halo-search-input[data-clearing="true"] .search-bar__effects::before,
+  .halo-search-input[data-clearing="true"] .search-bar__effects::after,
+  .halo-search-input__loading-char {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+  }
+}
+
+[role="tablist"][data-direction="forward"] .filter-tab::after { transform-origin: right; }
+[role="tablist"][data-direction="forward"] .filter-tab[aria-selected="true"]::after { transform-origin: left; }
+[role="tablist"][data-direction="backward"] .filter-tab::after { transform-origin: left; }
+[role="tablist"][data-direction="backward"] .filter-tab[aria-selected="true"]::after { transform-origin: right; }

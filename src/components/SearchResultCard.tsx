@@ -12,7 +12,7 @@ interface SearchResultCardProps {
 const resultDetails = {
   aircad: {
     title: "AirCAD",
-    url: "Semi-Finalist @ Hack the North 2026",
+    url: "Hack the North 2026 Semifinalist",
     href: "https://devpost.com/software/aircad",
     ariaLabel: "View AirCAD on Devpost",
   },

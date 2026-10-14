@@ -3,6 +3,22 @@
 @import "tailwindcss/utilities.css" layer(utilities);
 
 @font-face {
+  font-family: "Oxanium";
+  src: url("/fonts/Oxanium-Regular.ttf") format("truetype");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Oxanium";
+  src: url("/fonts/Oxanium-SemiBold.ttf") format("truetype");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 600;
+}
+
+@font-face {
   font-family: "Polaris";
   src: url("/fonts/PolarisTrial-Medium-BF66835f97e574a.ttf") format("truetype");
   font-display: swap;
@@ -964,7 +980,7 @@ html[data-contact-page="true"] .social-dock {
   white-space: nowrap;
 }
 
-.contact-intro h2 span {
+.contact-intro h2 > span:not(.tour-page-text) {
   margin-left: 3px;
   font-weight: 400;
   animation: contact-caret 1.05s steps(1, end) infinite;
@@ -2598,6 +2614,12 @@ html[data-contact-page="true"] .social-dock {
     animation: none !important;
     transition: none;
   }
+
+  .contact-flight-vacuum__head,
+  .contact-flight-vacuum__mouth::after,
+  .contact-planet--absorbing {
+    animation: none;
+  }
 }
 
 /* The submission flight is a fixed viewport layer, so the original form
@@ -2715,6 +2737,126 @@ html[data-contact-page="true"] .social-dock {
   }
 }
 
+.contact-flight-vacuum {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  width: var(--vacuum-neck-width);
+  height: var(--vacuum-extension, 0px);
+  pointer-events: none;
+  transform: translate3d(-50%, -100%, 0);
+}
+
+.contact-flight-vacuum__neck {
+  position: absolute;
+  inset: 0;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(90deg, #1f373c, #3d5f66 36%, #5a7f86 50%, #2f484e 76%, #172a2e);
+  box-shadow: inset 0 0 0 1px rgba(10, 20, 22, 0.35);
+}
+
+.contact-flight-vacuum__neck::before {
+  position: absolute;
+  top: -1px;
+  left: -2px;
+  right: -2px;
+  height: 3px;
+  border-radius: 2px;
+  content: "";
+  background: linear-gradient(90deg, #b8852f, #f0c76a 50%, #b8852f);
+}
+
+.contact-flight-vacuum__head {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: var(--vacuum-width);
+  height: var(--vacuum-head-height);
+  border-radius: 6px 6px 4px 4px;
+  background: linear-gradient(180deg, #3f6168, #254146 55%, #162a2e);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 2px 4px rgba(20, 30, 32, 0.32);
+  transform: translateX(-50%);
+}
+
+.contact-flight-vacuum__head::after {
+  position: absolute;
+  right: 6%;
+  bottom: 3px;
+  left: 6%;
+  height: 1px;
+  content: "";
+  background: linear-gradient(90deg, transparent, rgba(240, 199, 106, 0.9) 20%, rgba(240, 199, 106, 0.9) 80%, transparent);
+}
+
+.contact-flight-vacuum__mouth {
+  position: absolute;
+  top: 2px;
+  right: 5%;
+  left: 5%;
+  height: 4px;
+  border-radius: 999px;
+  background: #0b1517;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(217, 164, 65, 0.42);
+}
+
+.contact-flight-vacuum__mouth::after {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 140%;
+  height: 22px;
+  border-radius: 50%;
+  content: "";
+  opacity: 0;
+  background: radial-gradient(ellipse at 50% 100%, rgba(120, 170, 180, 0.45) 0, rgba(120, 170, 180, 0.16) 45%, transparent 72%);
+  filter: blur(3px);
+  transform: translateX(-50%);
+  transition: opacity 160ms ease;
+}
+
+.contact-flight-vacuum[data-vacuum-phase="sucking"] .contact-flight-vacuum__mouth::after {
+  opacity: 1;
+  animation: contact-vacuum-glow 260ms ease-in-out infinite alternate;
+}
+
+.contact-flight-vacuum[data-vacuum-phase="sucking"] .contact-flight-vacuum__head {
+  animation: contact-vacuum-rumble 90ms steps(2, end) infinite;
+}
+
+@keyframes contact-vacuum-glow {
+  from {
+    opacity: 0.55;
+    transform: translateX(-50%) scaleY(0.85);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scaleY(1.1);
+  }
+}
+
+@keyframes contact-vacuum-rumble {
+  from {
+    transform: translateX(calc(-50% - 0.6px));
+  }
+
+  to {
+    transform: translateX(calc(-50% + 0.6px));
+  }
+}
+
+.contact-flight-letter {
+  position: absolute;
+  z-index: 0;
+  display: block;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  white-space: pre;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+
 .contact-planet--rocket-contact {
   filter: brightness(1.08) saturate(1.04);
   box-shadow:
@@ -2722,6 +2864,29 @@ html[data-contact-page="true"] .social-dock {
     inset -9px -9px 15px rgba(15, 13, 10, 0.3),
     0 9px 14px rgba(45, 37, 27, 0.22),
     0 0 0 3px rgba(170, 131, 78, 0.13);
+}
+
+.contact-planet--absorbing {
+  animation: contact-planet-absorb 460ms ease-in-out infinite alternate;
+}
+
+@keyframes contact-planet-absorb {
+  from {
+    box-shadow:
+      inset 7px 6px 14px rgba(255, 255, 255, 0.23),
+      inset -9px -9px 15px rgba(15, 13, 10, 0.3),
+      0 9px 14px rgba(45, 37, 27, 0.22),
+      0 0 0 3px rgba(170, 131, 78, 0.13);
+  }
+
+  to {
+    box-shadow:
+      inset 7px 6px 16px rgba(255, 255, 255, 0.34),
+      inset -9px -9px 15px rgba(15, 13, 10, 0.26),
+      0 9px 16px rgba(45, 37, 27, 0.24),
+      0 0 0 6px rgba(170, 131, 78, 0.22),
+      0 0 18px 4px rgba(240, 199, 106, 0.28);
+  }
 }
 
 .contact-planet--reduced-highlight {
@@ -3099,8 +3264,9 @@ html[data-contact-page="true"] .social-dock {
   pointer-events: none;
 }
 
-.contact-planet:hover,
-.contact-planet:focus-visible {
+/* The label's invisible bridge joins the planet and text into one hover area. */
+.contact-orbit-item:hover .contact-planet,
+.contact-orbit-item:has(:focus-visible) .contact-planet {
   filter: brightness(1.12) saturate(1.03);
   box-shadow:
     inset 7px 6px 14px rgba(255, 255, 255, 0.24),
@@ -3114,15 +3280,44 @@ html[data-contact-page="true"] .social-dock {
   outline-offset: 5px;
 }
 
-.contact-planet svg {
+.contact-planet--schedule {
+  transition: filter 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.contact-orbit-item:hover .contact-planet--schedule,
+.contact-orbit-item:has(:focus-visible) .contact-planet--schedule {
+  transform: translate(-50%, -50%) scale(1.08);
+  box-shadow:
+    inset 7px 6px 14px rgba(255, 255, 255, 0.24),
+    inset -9px -9px 15px rgba(15, 13, 10, 0.28),
+    0 9px 14px rgba(45, 37, 27, 0.24),
+    0 0 0 5px rgba(170, 196, 205, 0.28),
+    0 0 22px rgba(126, 173, 190, 0.38);
+}
+
+.contact-planet .contact-planet__icon {
   position: relative;
   z-index: 2;
-  width: 29px;
-  height: 29px;
+  width: 56%;
+  height: 56%;
+  color: #fff;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.4;
-  filter: drop-shadow(0 1px 1px rgba(14, 12, 9, 0.24));
+  stroke-width: 1.8;
+  filter:
+    drop-shadow(0 1px 1px rgba(14, 12, 9, 0.7))
+    drop-shadow(0 2px 3px rgba(14, 12, 9, 0.35));
+  pointer-events: none;
+}
+
+.contact-planet .contact-planet__icon--brand {
+  fill: currentColor;
+  stroke: none;
+}
+
+.contact-planet--linkedin .contact-planet__icon {
+  width: 52%;
+  height: 52%;
 }
 
 .contact-planet--email {
@@ -3157,27 +3352,12 @@ html[data-contact-page="true"] .social-dock {
   pointer-events: none;
 }
 
-.contact-planet--linkedin svg {
-  width: 28px;
-  height: 28px;
-  padding: 2px;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 3px;
-}
-
 .contact-planet--github {
   --planet-size: 84px;
   background:
     radial-gradient(circle at 30% 28%, rgba(237, 231, 217, 0.65) 0 8%, transparent 22%),
     radial-gradient(circle at 69% 61%, #817b72 0 12%, transparent 26%),
     linear-gradient(145deg, #b9b4aa, #7d7770 52%, #3f3c38);
-}
-
-.contact-planet--github svg {
-  width: 31px;
-  height: 31px;
-  fill: #f8f5ee;
-  stroke-width: 1.05;
 }
 
 .contact-planet--schedule {
@@ -3217,8 +3397,29 @@ html[data-contact-page="true"] .social-dock {
   will-change: left, top;
 }
 
-.contact-orbit-item__label:hover strong,
-.contact-orbit-item__label:focus-visible strong {
+.search-panel .contact-orbit-item__label {
+  font-family: "Oxanium", "Trebuchet MS", sans-serif;
+}
+
+.contact-orbit-item__label::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--label-hit-length, 0px);
+  height: var(--label-hit-height, 0px);
+  content: "";
+  transform: translateY(-50%) rotate(var(--label-hit-angle, 0rad));
+  transform-origin: left center;
+}
+
+.contact-orbit-item:hover .contact-orbit-item__label strong,
+.contact-orbit-item:has(:focus-visible) .contact-orbit-item__label strong {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.contact-orbit-item--schedule:hover .contact-orbit-item__label small,
+.contact-orbit-item--schedule:has(:focus-visible) .contact-orbit-item__label small {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -3237,7 +3438,7 @@ html[data-contact-page="true"] .social-dock {
   color: #121718;
   font-size: 17px;
   font-weight: 600;
-  letter-spacing: -0.04em;
+  letter-spacing: 0.035em;
   line-height: 1.35;
 }
 
@@ -3253,7 +3454,7 @@ html[data-contact-page="true"] .social-dock {
   color: #252a2a;
   font-size: 14px;
   font-weight: 400;
-  letter-spacing: -0.035em;
+  letter-spacing: 0.01em;
   line-height: 1.25;
   text-align: center;
 }
@@ -3432,11 +3633,6 @@ html[data-contact-page="true"] .social-dock {
     --planet-size: 50px;
   }
 
-  .contact-planet svg {
-    width: 24px;
-    height: 24px;
-  }
-
   .contact-planet--linkedin::after {
     width: 74px;
     height: 18px;
@@ -3490,7 +3686,7 @@ html[data-contact-page="true"] .social-dock {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .contact-intro h2 span,
+  .contact-intro h2 > span:not(.tour-page-text),
   .contact-sun__core,
   .contact-sun__power,
   .contact-sun__rays,
@@ -5796,7 +5992,8 @@ html[data-theme="dark"] .contact-connector::after {
   box-shadow: 0 0 0 1px rgba(118, 181, 245, 0.2);
 }
 
-html[data-theme="dark"] .contact-orbit-item__label {
+html[data-theme="dark"] .contact-orbit-item__label,
+html[data-theme="dark"] .contact-orbit-item__label strong {
   color: #e4efff;
 }
 
@@ -5976,7 +6173,7 @@ main {
 
 .search-panel .search-bar {
   height: clamp(72px, 6vw, 96px);
-  gap: clamp(16px, 2.5vw, 48px);
+  gap: clamp(12px, 1.4vw, 22px);
   padding-inline: clamp(20px, 2.4vw, 36px);
 }
 
@@ -5988,7 +6185,10 @@ main {
 .search-panel .search-bar input {
   min-width: 0;
   max-width: 100%;
-  font-size: clamp(24px, 2.45vw, 38px);
+}
+
+.search-panel .halo-search-input__field {
+  font-size: clamp(20px, 1.9vw, 28px);
 }
 
 .search-bar__submit {
@@ -6231,8 +6431,8 @@ main {
    composition rules above intentionally favor desktop; these final overrides
    lower their minimums so the viewport width actually has room to breathe. */
 @media (max-width: 1024px) {
-  .search-panel .search-bar input {
-    font-size: clamp(18px, 2.8vw, 28px);
+  .search-panel .halo-search-input__field {
+    font-size: clamp(18px, 2.4vw, 24px);
   }
 
   .search-panel .filter-tab {
@@ -6310,8 +6510,8 @@ main {
     height: clamp(22px, 6vw, 26px);
   }
 
-  .search-panel .search-bar input {
-    font-size: clamp(16px, 4.3vw, 18px);
+  .search-panel .halo-search-input__field {
+    font-size: clamp(18px, 4.6vw, 20px);
   }
 
   .search-bar__submit {
@@ -6866,11 +7066,6 @@ main {
   --planet-size: clamp(48px, 7.1vw, 84px);
 }
 
-.contact-planet svg {
-  width: clamp(20px, 2.15vw, 31px);
-  height: clamp(20px, 2.15vw, 31px);
-}
-
 .contact-orbit-item__label {
   width: clamp(94px, 11.3vw, 154px);
 }
@@ -6904,8 +7099,8 @@ main {
 
 @media (max-width: 639px) {
   .contact-experience {
-    height: max(560px, calc(100svh - 140px));
-    min-height: max(560px, calc(100svh - 140px));
+    height: 1000px;
+    min-height: 1000px;
   }
 }
 
@@ -6966,6 +7161,27 @@ main,
 
 .browser-frame:has(.contact-search-panel) #portfolioSearchRoot {
   height: 100%;
+}
+
+@media (max-width: 639px) {
+  html:has(.contact-search-panel),
+  body:has(.contact-search-panel) {
+    height: auto;
+    overflow-y: auto;
+  }
+
+  .browser-frame:has(.contact-search-panel),
+  .browser-frame:has(.contact-search-panel) .hero-content,
+  .browser-frame:has(.contact-search-panel) #portfolioSearchRoot,
+  .browser-frame:has(.contact-search-panel) .search-panel,
+  .browser-frame:has(.contact-search-panel) .search-panel__inner {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .browser-frame:has(.contact-search-panel) {
+    overflow: visible;
+  }
 }
 
 /* The About panel is taller than the fixed tab shell. Let this route grow with

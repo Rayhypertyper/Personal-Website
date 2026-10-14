@@ -1,5 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { ArrowRight } from "lucide-react";
+import { TourPageText } from "./TourPageText";
+import { TOUR_READING_CHARACTERS_PER_SECOND } from "../tour-config";
 
 type ExperienceLogoKind = "auxilium" | "nokia" | "shad";
 
@@ -18,9 +20,9 @@ const experienceEntries: readonly ExperienceEntry[] = [
     id: "nokia",
     period: ["Summer", "2025"],
     company: "Nokia",
-    role: "Automation Intern",
-    description: "Built and tested data-driven UI components.",
-    tags: ["TypeScript", "Cypress", "CSS"],
+    role: "Software Engineering Intern",
+    description: "Increased testing coverage for NSP DCA platform by 80% and worked on production React/Redux/TypeScript applications",
+    tags: ["React", "TypeScript", "Redux", "Cypress"],
     logo: "nokia",
   },
   {
@@ -124,7 +126,7 @@ export function ExperienceTimeline() {
       <h2 className="sr-only">Experience</h2>
 
       {experienceEntries.map((entry) => (
-        <article className="experience-entry" key={entry.id}>
+        <article className="experience-entry" key={entry.id} data-tour-target={entry.id === "nokia" ? "experience" : undefined}>
           <div className="experience-entry__period" aria-label={entry.period.join(" ")}>
             {entry.period.map((line) => (
               <span key={line}>{line}</span>
@@ -136,19 +138,19 @@ export function ExperienceTimeline() {
             <span />
           </span>
 
-          <div className="experience-card">
+          <div className="experience-card" data-tour-focus-block={entry.id === "nokia" ? "experience-card" : undefined}>
             <div className="experience-card__brand">
               <ExperienceLogo kind={entry.logo} />
             </div>
             <span className="experience-card__divider" aria-hidden="true" />
 
             <div className="experience-card__body">
-              <h3>{entry.company}</h3>
-              <p className="experience-card__role">{entry.role}</p>
-              <p className="experience-card__description">{entry.description}</p>
+              <h3><TourPageText>{entry.company}</TourPageText></h3>
+              <p className="experience-card__role"><TourPageText cps={TOUR_READING_CHARACTERS_PER_SECOND}>{entry.role}</TourPageText></p>
+              <p className="experience-card__description"><TourPageText cps={TOUR_READING_CHARACTERS_PER_SECOND * (entry.id === "nokia" ? 0.857375 * 0.9 : 1)}>{entry.description}</TourPageText></p>
               <div className="experience-card__tags" aria-label="Skills">
                 {entry.tags.map((tag) => (
-                  <span key={tag}>{tag}</span>
+                  <span key={tag}><TourPageText inline>{tag}</TourPageText></span>
                 ))}
               </div>
             </div>

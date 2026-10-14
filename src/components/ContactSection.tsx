@@ -5,7 +5,9 @@ import {
   Mail,
   Power,
 } from "lucide-react";
+import { TourPageText } from "./TourPageText";
 import {
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -13,37 +15,40 @@ import {
   type ReactNode,
 } from "react";
 import { ContactDoodles } from "./ContactDoodles";
+import {
+  CONTACT_EMAIL,
+  GITHUB_URL,
+  LINKEDIN_URL,
+  RESUME_URL,
+  SCHEDULE_URL,
+} from "../contact-links";
 
 type OrbitName = "email" | "linkedin" | "github" | "schedule" | "resume";
 
 interface OrbitDefinition {
   name: OrbitName;
   label: string;
-  detail: string;
   phase: number;
   icon: ReactNode;
 }
 
 const ORBIT_PHASE_STEP = (Math.PI * 2) / 5;
-const LINKEDIN_URL = "http://linkedin.com/in/rayxurx";
-const GITHUB_URL = "https://github.com/Rayhypertyper/";
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/meajjnqy";
+const DEFAULT_CONTACT_MESSAGE = "Hi Ray, I'd love to connect and learn more about your work.";
 
 const ORBITS: readonly OrbitDefinition[] = [
   {
     name: "email",
     label: "Email",
-    detail: "your.email@example.com",
     phase: -Math.PI / 2,
-    icon: <Mail aria-hidden="true" />,
+    icon: <Mail className="contact-planet__icon" aria-hidden="true" />,
   },
   {
     name: "linkedin",
     label: "LinkedIn",
-    detail: "/in/rayxurx",
     phase: -Math.PI / 2 + ORBIT_PHASE_STEP,
     icon: (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
+      <svg className="contact-planet__icon contact-planet__icon--brand" viewBox="3 3 18 18" fill="currentColor" stroke="none" aria-hidden="true">
         <path d="M20.45 3H3.55A.55.55 0 0 0 3 3.55v16.9c0 .3.25.55.55.55h16.9c.3 0 .55-.25.55-.55V3.55a.55.55 0 0 0-.55-.55ZM8.34 18.34H5.67V9.75h2.67v8.59ZM7 8.58a1.55 1.55 0 1 1 0-3.1 1.55 1.55 0 0 1 0 3.1Zm11.34 9.76h-2.66v-4.18c0-1-.02-2.28-1.39-2.28-1.39 0-1.6 1.09-1.6 2.2v4.26h-2.67V9.75h2.56v1.17h.04a2.81 2.81 0 0 1 2.53-1.39c2.7 0 3.2 1.78 3.2 4.1v4.71Z" />
       </svg>
     ),
@@ -51,27 +56,24 @@ const ORBITS: readonly OrbitDefinition[] = [
   {
     name: "github",
     label: "GitHub",
-    detail: "/Rayhypertyper",
     phase: -Math.PI / 2 + ORBIT_PHASE_STEP * 2,
     icon: (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 .7A11.3 11.3 0 0 0 8.43 22.72c.57.1.78-.25.78-.55v-2.16c-3.18.69-3.85-1.35-3.85-1.35-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.25 3.33.96.1-.74.4-1.25.73-1.54-2.54-.29-5.21-1.27-5.21-5.66 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.11 1.17A10.8 10.8 0 0 1 12 5.93a10.8 10.8 0 0 1 2.83.38c2.15-1.48 3.11-1.17 3.11-1.17.62 1.57.23 2.73.11 3.02.73.8 1.18 1.82 1.18 3.07 0 4.4-2.68 5.36-5.23 5.65.41.36.78 1.05.78 2.12v3.17c0 .3.2.66.79.55A11.3 11.3 0 0 0 12 .7Z" />
+      <svg className="contact-planet__icon contact-planet__icon--brand" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
+        <path d="M12 .297C5.37.297 0 5.67 0 12.297c0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.043-1.61-4.043-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.236 1.839 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.605-2.665-.3-5.467-1.334-5.467-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23a11.52 11.52 0 0 1 3.003-.404c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.652.242 2.873.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.625-5.479 5.921.43.371.823 1.102.823 2.222 0 1.606-.015 2.898-.015 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
       </svg>
     ),
   },
   {
     name: "schedule",
-    label: "Schedule",
-    detail: "Book a meeting",
+    label: "Calendy",
     phase: -Math.PI / 2 + ORBIT_PHASE_STEP * 3,
-    icon: <CalendarDays aria-hidden="true" />,
+    icon: <CalendarDays className="contact-planet__icon" aria-hidden="true" />,
   },
   {
     name: "resume",
     label: "Resume",
-    detail: "Available on request",
     phase: -Math.PI / 2 + ORBIT_PHASE_STEP * 4,
-    icon: <FileText aria-hidden="true" />,
+    icon: <FileText className="contact-planet__icon" aria-hidden="true" />,
   },
 ] as const;
 
@@ -128,6 +130,7 @@ const CONTACT_SUN_MOUSE_PULL_RADIUS_SCALE = 1.5;
 const CONTACT_SOLAR_SYSTEM_OFFSET_Y = 80;
 const CONTACT_ROCKET_PNG_WIDTH = 1280;
 const CONTACT_ROCKET_PNG_VISIBLE_LEFT = 306;
+const CONTACT_ROCKET_PNG_VISIBLE_RIGHT = 1095;
 
 const CONTACT_ROCKET_FLIGHT_CONFIG = {
   preparationDuration: 100,
@@ -149,10 +152,43 @@ const CONTACT_ROCKET_FLIGHT_CONFIG = {
   sunAvoidancePadding: 26,
   landingOverlap: 0,
   landingBounce: 3.5,
+  vacuumRiseDuration: 420,
+  vacuumSuctionDuration: 1_050,
+  vacuumRetractDuration: 360,
+  vacuumHeadWidthScale: 0.5,
+  vacuumHeadHeight: 14,
+  vacuumNeckWidthScale: 0.22,
+  vacuumMouthOverlap: 5,
+  vacuumLetterDuration: 440,
+  vacuumLetterDurationJitter: 120,
+  vacuumLetterPrewobble: 160,
+  vacuumMaxLetters: 260,
+  dumpLiftDuration: 240,
+  dumpLift: 14,
+  dumpPourDuration: 820,
+  dumpPourTail: 260,
+  dumpLowerDuration: 280,
+  dumpGravity: 520,
+  dumpAbsorbDepth: 22,
+  dumpNozzleInset: 6,
+  returnIgnitionDuration: 320,
+  returnSpeedScale: 1.35,
+  returnApproachDistance: 160,
+  returnApproachAngle: Math.PI / 4,
+  returnCurveStrength: 0.5,
+  returnControlMin: 140,
+  returnControlMax: 260,
+  returnDockingDuration: 300,
+  returnDockingSlide: 3,
 } as const;
 
 type RocketFlightState =
   | "idle"
+  | "vacuuming"
+  | "dumping"
+  | "departing"
+  | "homebound"
+  | "docking"
   | "launching"
   | "flying"
   | "landing"
@@ -202,6 +238,48 @@ interface RocketFlightPlan {
   approachPathLength: number;
   verticalDescentDistance: number;
   geometryRevision: number;
+}
+
+interface VacuumLetter {
+  element: HTMLElement;
+  start: ContactPoint;
+  control: ContactPoint;
+  delay: number;
+  duration: number;
+  spin: number;
+  width: number;
+  height: number;
+}
+
+interface RocketReturnPlan {
+  startTime: number;
+  distanceOffset: number;
+  p0: ContactPoint;
+  p1: ContactPoint;
+  p2: ContactPoint;
+  p3: ContactPoint;
+  cruiseLength: number;
+  q0: ContactPoint;
+  q1: ContactPoint;
+  q2: ContactPoint;
+  q3: ContactPoint;
+  flareLength: number;
+  flareStartTime: number;
+  flareDuration: number;
+  slot: ContactPoint;
+  geometryRevision: number;
+}
+
+interface DumpLetter {
+  letter: VacuumLetter;
+  delay: number;
+  offsetX: number;
+  vx: number;
+  vy: number;
+  spin: number;
+  startY: number;
+  emittedAt: number | null;
+  done: boolean;
 }
 
 interface ContactSubmissionPayload {
@@ -297,6 +375,13 @@ const easeOutCubic = (progress: number) =>
 
 const easeOutPower = (progress: number, exponent: number) =>
   1 - Math.pow(1 - progress, exponent);
+
+const easeOutBack = (progress: number, overshoot = 1.3) =>
+  1 +
+  (overshoot + 1) * Math.pow(progress - 1, 3) +
+  overshoot * Math.pow(progress - 1, 2);
+
+const easeInCubic = (progress: number) => progress * progress * progress;
 
 const lerp = (start: number, end: number, progress: number) =>
   start + (end - start) * progress;
@@ -397,6 +482,67 @@ const getCubicPointAtDistance = (
   }
 
   return p3;
+};
+
+const getCubicProgressAtDistance = (
+  p0: ContactPoint,
+  p1: ContactPoint,
+  p2: ContactPoint,
+  p3: ContactPoint,
+  distance: number,
+  totalLength: number,
+) => {
+  if (distance <= 0) {
+    return 0;
+  }
+
+  if (distance >= totalLength) {
+    return 1;
+  }
+
+  let travelled = 0;
+  let previous = p0;
+
+  for (let index = 1; index <= 28; index += 1) {
+    const point = getCubicPoint(p0, p1, p2, p3, index / 28);
+    const segmentLength = Math.hypot(
+      point.x - previous.x,
+      point.y - previous.y,
+    );
+
+    if (travelled + segmentLength >= distance) {
+      const segmentProgress = segmentLength
+        ? (distance - travelled) / segmentLength
+        : 0;
+      return (index - 1 + segmentProgress) / 28;
+    }
+
+    travelled += segmentLength;
+    previous = point;
+  }
+
+  return 1;
+};
+
+const getCubicTangent = (
+  p0: ContactPoint,
+  p1: ContactPoint,
+  p2: ContactPoint,
+  p3: ContactPoint,
+  progress: number,
+): ContactPoint => {
+  const inverse = 1 - progress;
+
+  return {
+    x:
+      3 * inverse * inverse * (p1.x - p0.x) +
+      6 * inverse * progress * (p2.x - p1.x) +
+      3 * progress * progress * (p3.x - p2.x),
+    y:
+      3 * inverse * inverse * (p1.y - p0.y) +
+      6 * inverse * progress * (p2.y - p1.y) +
+      3 * progress * progress * (p3.y - p2.y),
+  };
 };
 
 const getRocketAcceleration = () =>
@@ -833,6 +979,22 @@ export function ContactSection({
         // copy readable to assistive technology but remove the visual overlap.
         label.style.opacity =
           shouldAvoidRocket && !labelPositioned ? "0" : "";
+
+        // Extend the label's target to the planet, following its final clamped
+        // position and any direction changes made to avoid the rocket.
+        const labelOffsetX = Number.parseFloat(label.style.left);
+        const labelOffsetY = Number.parseFloat(label.style.top);
+        label.style.setProperty(
+          "--label-hit-length",
+          `${Math.max(0, Math.hypot(labelOffsetX, labelOffsetY) - planetRadius + 2)}px`,
+        );
+        label.style.setProperty("--label-hit-height", `${planetRadius * 2}px`);
+        label.style.setProperty(
+          "--label-hit-angle",
+          `${Math.atan2(-labelOffsetY, -labelOffsetX)}rad`,
+        );
+        label.style.pointerEvents =
+          shouldAvoidRocket && !labelPositioned ? "none" : "";
       });
     };
 
@@ -1719,6 +1881,9 @@ export function ContactSection({
     let flightLayer: HTMLElement | null = null;
     let landedRocket: HTMLElement | null = null;
     let activePlan: RocketFlightPlan | null = null;
+    let returnPlan: RocketReturnPlan | null = null;
+    let departSeatOffset: ContactPoint = { x: 0, y: 0 };
+    let dockingStartAngle = 0;
     let launchCenter: ContactPoint | null = null;
     let currentCenter: ContactPoint | null = null;
     let landingStart: ContactPoint | null = null;
@@ -1738,6 +1903,16 @@ export function ContactSection({
     let previousFormBusy: string | null = null;
     let previousContactFlight: string | undefined;
     let previousContactSubmission: string | undefined;
+    let vacuumElement: HTMLElement | null = null;
+    let vacuumLetters: VacuumLetter[] = [];
+    let dumpLetters: DumpLetter[] = [];
+    let vacuumMouth: ContactPoint = { x: 0, y: 0 };
+    let vacuumTargetExtension = 0;
+    let vacuumCurrentExtension = 0;
+    let returnVacuumExtension = 0;
+    let vacuumMessageField: HTMLTextAreaElement | null = null;
+    let previousMessageColor = "";
+    let previousMessageCaretColor = "";
     const rocketOverlay = document.createElement("div");
     rocketOverlay.className = "contact-rocket-overlay";
     rocketOverlay.setAttribute("aria-hidden", "true");
@@ -2141,6 +2316,342 @@ export function ContactSection({
       flightLayer?.setAttribute("data-flight-phase", phase);
     };
 
+    const setVacuumExtension = (extension: number) => {
+      vacuumCurrentExtension = extension;
+      vacuumElement?.style.setProperty("--vacuum-extension", `${extension}px`);
+    };
+
+    const setVacuumPhase = (phase: string) => {
+      vacuumElement?.setAttribute("data-vacuum-phase", phase);
+    };
+
+    const removeVacuumElement = () => {
+      vacuumElement?.remove();
+      vacuumElement = null;
+    };
+
+    const removeVacuumLetters = () => {
+      vacuumLetters.forEach(({ element }) => element.remove());
+      vacuumLetters = [];
+    };
+
+    const restoreVacuumMessageField = () => {
+      if (vacuumMessageField) {
+        vacuumMessageField.style.color = previousMessageColor;
+        vacuumMessageField.style.caretColor = previousMessageCaretColor;
+        vacuumMessageField = null;
+      }
+    };
+
+    const teardownVacuum = () => {
+      removeVacuumLetters();
+      dumpLetters = [];
+      restoreVacuumMessageField();
+      removeVacuumElement();
+      vacuumTargetExtension = 0;
+      vacuumCurrentExtension = 0;
+    };
+
+    const beginLaunchPhase = (time: number) => {
+      flightStateRef.current = "launching";
+      phaseStartedAt = time;
+      setLayerPhase("preparing");
+      rocketSmokeStartRef.current?.();
+    };
+
+    const createVacuumLetters = (
+      textarea: HTMLTextAreaElement,
+      mouth: ContactPoint,
+    ) => {
+      const textareaRect = textarea.getBoundingClientRect();
+      const style = window.getComputedStyle(textarea);
+      const mirror = document.createElement("div");
+      const copiedProperties = [
+        "fontFamily",
+        "fontSize",
+        "fontWeight",
+        "fontStyle",
+        "fontVariant",
+        "letterSpacing",
+        "wordSpacing",
+        "lineHeight",
+        "textTransform",
+        "textIndent",
+        "tabSize",
+        "textAlign",
+        "direction",
+        "wordBreak",
+        "paddingTop",
+        "paddingRight",
+        "paddingBottom",
+        "paddingLeft",
+        "borderTopWidth",
+        "borderRightWidth",
+        "borderBottomWidth",
+        "borderLeftWidth",
+      ] as const;
+      copiedProperties.forEach((property) => {
+        mirror.style[property] = style[property];
+      });
+      mirror.style.position = "absolute";
+      mirror.style.visibility = "hidden";
+      mirror.style.pointerEvents = "none";
+      mirror.style.margin = "0";
+      mirror.style.overflow = "hidden";
+      mirror.style.boxSizing = "border-box";
+      mirror.style.whiteSpace = "pre-wrap";
+      mirror.style.overflowWrap = "break-word";
+      mirror.style.borderStyle = "solid";
+      mirror.style.borderColor = "transparent";
+      mirror.style.left = `${textareaRect.left}px`;
+      mirror.style.top = `${textareaRect.top}px`;
+      mirror.style.height = `${textareaRect.height}px`;
+      mirror.style.width = `${
+        textarea.clientWidth +
+        parseFloat(style.borderLeftWidth) +
+        parseFloat(style.borderRightWidth)
+      }px`;
+
+      // Each character is measured in a hidden copy wrapped like the textarea,
+      // so the particles start exactly where the text is drawn.
+      const mirrorGlyphs: Array<{ char: string; span: HTMLSpanElement }> = [];
+      Array.from(textarea.value).forEach((char) => {
+        if (/\s/.test(char)) {
+          mirror.appendChild(document.createTextNode(char));
+          return;
+        }
+
+        const span = document.createElement("span");
+        span.textContent = char;
+        mirror.appendChild(span);
+        mirrorGlyphs.push({ char, span });
+      });
+      rocketOverlay.appendChild(mirror);
+      mirror.scrollTop = textarea.scrollTop;
+
+      const visibleTop =
+        textareaRect.top + parseFloat(style.borderTopWidth);
+      const visibleBottom =
+        textareaRect.bottom - parseFloat(style.borderBottomWidth);
+      const visibleGlyphs = mirrorGlyphs
+        .map(({ char, span }) => ({
+          char,
+          rect: span.getBoundingClientRect(),
+        }))
+        .filter(({ rect }) => {
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+
+          return (
+            rect.width > 0 &&
+            centerY >= visibleTop &&
+            centerY <= visibleBottom &&
+            centerX >= textareaRect.left &&
+            centerX <= textareaRect.right
+          );
+        })
+        .slice(0, CONTACT_ROCKET_FLIGHT_CONFIG.vacuumMaxLetters);
+      mirror.remove();
+
+      const letters = visibleGlyphs.map(({ char, rect }): VacuumLetter => {
+        const element = document.createElement("span");
+        element.className = "contact-flight-letter";
+        element.textContent = char;
+        element.style.left = `${rect.left}px`;
+        element.style.top = `${rect.top}px`;
+        element.style.width = `${rect.width}px`;
+        element.style.height = `${rect.height}px`;
+        element.style.lineHeight = `${rect.height}px`;
+        element.style.fontFamily = style.fontFamily;
+        element.style.fontSize = style.fontSize;
+        element.style.fontWeight = style.fontWeight;
+        element.style.fontStyle = style.fontStyle;
+        element.style.letterSpacing = style.letterSpacing;
+        element.style.textTransform = style.textTransform;
+        element.style.color = style.color;
+        rocketOverlay.insertBefore(element, flightLayer);
+
+        return {
+          element,
+          start: {
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2,
+          },
+          control: { x: 0, y: 0 },
+          delay: 0,
+          duration: 0,
+          spin: 0,
+          width: rect.width,
+          height: rect.height,
+        };
+      });
+
+      const distances = letters.map((letter) =>
+        Math.hypot(letter.start.x - mouth.x, letter.start.y - mouth.y),
+      );
+      const maxDistance = Math.max(1, ...distances);
+
+      letters.forEach((letter, index) => {
+        const config = CONTACT_ROCKET_FLIGHT_CONFIG;
+        const duration =
+          config.vacuumLetterDuration +
+          (Math.random() * 2 - 1) * config.vacuumLetterDurationJitter;
+        const spread = clamp(
+          (distances[index] / maxDistance) * 0.7 + Math.random() * 0.3,
+          0,
+          1,
+        );
+
+        letter.duration = duration;
+        letter.delay = spread * (config.vacuumSuctionDuration - duration);
+        letter.spin =
+          (letter.start.x < mouth.x ? -1 : 1) * (0.9 + Math.random() * 1.7);
+        letter.control = {
+          x:
+            lerp(letter.start.x, mouth.x, 0.8) +
+            (Math.random() * 2 - 1) * 6,
+          y: lerp(letter.start.y, mouth.y, 0.35),
+        };
+      });
+
+      if (letters.length > 0) {
+        vacuumMessageField = textarea;
+        previousMessageColor = textarea.style.color;
+        previousMessageCaretColor = textarea.style.caretColor;
+        textarea.style.color = "transparent";
+        textarea.style.caretColor = "transparent";
+      }
+
+      return letters;
+    };
+
+    const updateVacuumLetters = (suctionElapsed: number) => {
+      const config = CONTACT_ROCKET_FLIGHT_CONFIG;
+
+      vacuumLetters.forEach((letter) => {
+        const progress = (suctionElapsed - letter.delay) / letter.duration;
+
+        if (progress < 0) {
+          const remaining = letter.delay - suctionElapsed;
+          if (remaining < config.vacuumLetterPrewobble) {
+            const amplitude =
+              0.8 * (1 - remaining / config.vacuumLetterPrewobble);
+            letter.element.style.transform = `translate3d(${
+              (Math.random() * 2 - 1) * amplitude
+            }px, ${(Math.random() * 2 - 1) * amplitude}px, 0)`;
+          }
+          return;
+        }
+
+        if (progress >= 1) {
+          if (letter.element.style.visibility !== "hidden") {
+            letter.element.style.visibility = "hidden";
+          }
+          return;
+        }
+
+        const eased = progress ** 1.7;
+        const inverse = 1 - eased;
+        const point = {
+          x:
+            inverse * inverse * letter.start.x +
+            2 * inverse * eased * letter.control.x +
+            eased * eased * vacuumMouth.x,
+          y:
+            inverse * inverse * letter.start.y +
+            2 * inverse * eased * letter.control.y +
+            eased * eased * vacuumMouth.y,
+        };
+        const scale = lerp(1, 0.28, eased);
+        const rotation = letter.spin * eased;
+
+        letter.element.style.transform = `translate3d(${
+          point.x - letter.start.x
+        }px, ${point.y - letter.start.y}px, 0) rotate(${rotation}rad) scale(${scale})`;
+        letter.element.style.opacity = `${
+          progress < 0.72 ? 1 : 1 - (progress - 0.72) / 0.28
+        }`;
+      });
+    };
+
+    const hideVacuumLetters = () => {
+      vacuumLetters.forEach(({ element }) => {
+        element.style.visibility = "hidden";
+      });
+    };
+
+    const beginDumpPhase = (time: number) => {
+      const config = CONTACT_ROCKET_FLIGHT_CONFIG;
+      const sortedLetters = [...vacuumLetters].sort(
+        (a, b) => b.delay - a.delay,
+      );
+      const lastIndex = Math.max(1, sortedLetters.length - 1);
+
+      flightStateRef.current = "dumping";
+      phaseStartedAt = time;
+      setLayerPhase("dumping");
+      emailPlanet.classList.add("contact-planet--absorbing");
+      dumpLetters = sortedLetters.map((letter, index) => ({
+        letter,
+        delay:
+          (index / lastIndex) * config.dumpPourDuration * 0.92 +
+          Math.random() * config.dumpPourDuration * 0.08,
+        offsetX: (Math.random() * 2 - 1) * 5,
+        vx: (Math.random() * 2 - 1) * 26,
+        vy: 16 + Math.random() * 28,
+        spin: (Math.random() * 2 - 1) * 3.2,
+        startY: 0,
+        emittedAt: null,
+        done: false,
+      }));
+    };
+
+    const updateDumpLetters = (
+      pourElapsed: number,
+      time: number,
+      center: ContactPoint,
+      radius: number,
+      lift: number,
+    ) => {
+      const config = CONTACT_ROCKET_FLIGHT_CONFIG;
+
+      dumpLetters.forEach((dump) => {
+        if (dump.done || pourElapsed < dump.delay) {
+          return;
+        }
+
+        const { element, width, height } = dump.letter;
+        if (dump.emittedAt === null) {
+          dump.emittedAt = time;
+          dump.startY = -radius - lift - config.dumpNozzleInset;
+          element.style.left = "0px";
+          element.style.top = "0px";
+          element.style.visibility = "visible";
+        }
+
+        const age = (time - dump.emittedAt) / 1000;
+        const x = dump.offsetX + dump.vx * age;
+        const y =
+          dump.startY + dump.vy * age + 0.5 * config.dumpGravity * age * age;
+        const surfaceY = -Math.sqrt(Math.max(0, radius * radius - x * x));
+        const depth = y - surfaceY;
+
+        if (depth >= config.dumpAbsorbDepth || age > 2.5) {
+          element.style.visibility = "hidden";
+          dump.done = true;
+          return;
+        }
+
+        const absorbProgress = Math.max(0, depth) / config.dumpAbsorbDepth;
+        element.style.opacity = `${1 - absorbProgress}`;
+        element.style.transform = `translate3d(${
+          center.x + x - width / 2
+        }px, ${center.y + y - height / 2}px, 0) rotate(${
+          dump.spin * age
+        }rad) scale(${lerp(1, 0.55, absorbProgress)})`;
+      });
+    };
+
     const clearLandedRocket = () => {
       const rocketToClear = landedRocket;
       rocketToClear?.parentNode?.removeChild(rocketToClear);
@@ -2156,6 +2667,174 @@ export function ContactSection({
       }
     };
     landedRocketPositionRef.current = updateLandedRocketPosition;
+
+    const measureSlotCenter = (): ContactPoint | null => {
+      const visible = rocket.getBoundingClientRect();
+      const bounds =
+        visible.width > 0 ? visible : rocketButton.getBoundingClientRect();
+      if (bounds.width <= 0 || bounds.height <= 0) {
+        return null;
+      }
+
+      return {
+        x: bounds.left + bounds.width / 2,
+        y: bounds.top + bounds.height / 2,
+      };
+    };
+
+    const buildReturnPlan = (
+      startTime: number,
+      startPoint: ContactPoint,
+      heading: ContactPoint,
+      slot: ContactPoint,
+      distanceOffset: number,
+    ): RocketReturnPlan => {
+      const config = CONTACT_ROCKET_FLIGHT_CONFIG;
+      const approach = {
+        x: Math.cos(config.returnApproachAngle),
+        y: Math.sin(config.returnApproachAngle),
+      };
+      const approachStart = {
+        x: slot.x - approach.x * config.returnApproachDistance,
+        y: slot.y - approach.y * config.returnApproachDistance,
+      };
+      const chord =
+        Math.hypot(approachStart.x - startPoint.x, approachStart.y - startPoint.y) ||
+        1;
+      const control = clamp(
+        chord * config.returnCurveStrength,
+        config.returnControlMin,
+        config.returnControlMax,
+      );
+      const p0 = startPoint;
+      const p2 = {
+        x: approachStart.x - approach.x * control,
+        y: approachStart.y - approach.y * control,
+      };
+      const p3 = approachStart;
+
+      let bestP1: ContactPoint = {
+        x: p0.x + heading.x * control,
+        y: p0.y + heading.y * control,
+      };
+      let bestScore = Number.NEGATIVE_INFINITY;
+      [1, 0.62, 0.38].forEach((scale, index) => {
+        const p1 = {
+          x: p0.x + heading.x * control * scale,
+          y: p0.y + heading.y * control * scale,
+        };
+        const length = estimateCubicLength(p0, p1, p2, p3);
+        const clearance = getMinimumSunClearance(p0, p1, p2, p3);
+        const score = clearance - length * 0.008 + (index === 0 ? 3 : 0);
+
+        if (score > bestScore) {
+          bestScore = score;
+          bestP1 = p1;
+        }
+      });
+
+      const flareControl = config.returnApproachDistance * 0.45;
+      const q0 = approachStart;
+      const q1 = {
+        x: approachStart.x + approach.x * flareControl,
+        y: approachStart.y + approach.y * flareControl,
+      };
+      const q2 = { x: slot.x - flareControl, y: slot.y };
+      const q3 = slot;
+      const cruiseLength = estimateCubicLength(p0, bestP1, p2, p3);
+      const flareLength = estimateCubicLength(q0, q1, q2, q3);
+
+      return {
+        startTime,
+        distanceOffset,
+        p0,
+        p1: bestP1,
+        p2,
+        p3,
+        cruiseLength,
+        q0,
+        q1,
+        q2,
+        q3,
+        flareLength,
+        flareStartTime:
+          startTime +
+          getRocketTimeForDistance(distanceOffset + cruiseLength) /
+            config.returnSpeedScale,
+        flareDuration:
+          getRocketDecelerationDuration(flareLength) / config.returnSpeedScale,
+        slot,
+        geometryRevision: orbitClockRef.current.geometryRevision,
+      };
+    };
+
+    const getReturnPose = (plan: RocketReturnPlan, distance: number) => {
+      const useCruise = distance <= plan.cruiseLength;
+      const [c0, c1, c2, c3] = useCruise
+        ? [plan.p0, plan.p1, plan.p2, plan.p3]
+        : [plan.q0, plan.q1, plan.q2, plan.q3];
+      const segmentDistance = useCruise
+        ? distance
+        : distance - plan.cruiseLength;
+      const segmentLength = useCruise ? plan.cruiseLength : plan.flareLength;
+      const progress = getCubicProgressAtDistance(
+        c0,
+        c1,
+        c2,
+        c3,
+        segmentDistance,
+        segmentLength,
+      );
+      const tangent = getCubicTangent(c0, c1, c2, c3, progress);
+
+      return {
+        point: getCubicPoint(c0, c1, c2, c3, progress),
+        angle: Math.atan2(tangent.y, tangent.x),
+      };
+    };
+
+    const beginDepartPhase = (time: number) => {
+      if (!flightLayer) {
+        settleFlight();
+        return;
+      }
+
+      emailPlanet.classList.remove("contact-planet--absorbing");
+      const detachCenter = detachRocketFromPlanet(flightLayer);
+      const live = getLivePlanetMetrics();
+      const seat = getLandingPoint(live.center, live.radius || planetRadius);
+      departSeatOffset = {
+        x: detachCenter.x - seat.x,
+        y: detachCenter.y - seat.y,
+      };
+      currentCenter = detachCenter;
+      flightStateRef.current = "departing";
+      phaseStartedAt = time;
+      setLayerPhase("ignition");
+    };
+
+    const beginHomeboundPhase = (time: number) => {
+      const slot = measureSlotCenter() ?? launchCenter;
+      if (!slot || !currentCenter) {
+        settleFlight(new Error("Rocket return position is unavailable."));
+        return;
+      }
+
+      launchCenter = slot;
+      emailPlanet.classList.remove("contact-planet--rocket-contact");
+      returnPlan = buildReturnPlan(
+        time,
+        currentCenter,
+        { x: 0, y: -1 },
+        slot,
+        0,
+      );
+      lastPlanRebuildAt = time;
+      geometryDirty = false;
+      flightStateRef.current = "homebound";
+      phaseStartedAt = time;
+      setLayerPhase("flying");
+    };
 
     const restoreSubmissionLock = () => {
       controlsBeforeFlight.forEach(({ element, disabled }) => {
@@ -2186,6 +2865,7 @@ export function ContactSection({
       emailPlanet.classList.remove(
         "contact-planet--rocket-contact",
         "contact-planet--reduced-highlight",
+        "contact-planet--absorbing",
       );
     };
 
@@ -2208,12 +2888,14 @@ export function ContactSection({
       flightLayer = null;
       rocketFlightAngleRef.current = 0;
       activePlan = null;
+      returnPlan = null;
       launchCenter = null;
       currentCenter = null;
       landingStart = null;
       returningToForm = false;
       returnFromAngle = 0;
 
+      teardownVacuum();
       restoreSubmissionLock();
       rocketSmokeStopRef.current?.();
 
@@ -2279,6 +2961,11 @@ export function ContactSection({
       returnStartedAt = performance.now();
       returnFrom = currentCenter;
       returnFromAngle = rocketFlightAngleRef.current;
+      returnVacuumExtension = vacuumCurrentExtension;
+      setVacuumPhase("retracting");
+      removeVacuumLetters();
+      dumpLetters = [];
+      restoreVacuumMessageField();
       flightStateRef.current = "error";
       setLayerPhase("returning");
       if (!animationFrame) {
@@ -2308,6 +2995,9 @@ export function ContactSection({
           point,
           lerpAngle(returnFromAngle, 0, easeOutCubic(progress)),
         );
+        setVacuumExtension(
+          lerp(returnVacuumExtension, 0, easeOutCubic(progress)),
+        );
 
         if (progress >= 1) {
           settleFlight(new Error("Contact submission failed."));
@@ -2319,6 +3009,46 @@ export function ContactSection({
       }
 
       switch (flightStateRef.current) {
+        case "vacuuming": {
+          if (!launchCenter || !vacuumElement) {
+            beginLaunchPhase(time);
+            break;
+          }
+
+          const config = CONTACT_ROCKET_FLIGHT_CONFIG;
+          const elapsed = Math.max(0, time - phaseStartedAt);
+          const suctionEnd =
+            config.vacuumRiseDuration + config.vacuumSuctionDuration;
+          const retractEnd = suctionEnd + config.vacuumRetractDuration;
+
+          if (elapsed < config.vacuumRiseDuration) {
+            setVacuumPhase("rising");
+            setVacuumExtension(
+              vacuumTargetExtension *
+                easeOutBack(elapsed / config.vacuumRiseDuration),
+            );
+          } else if (elapsed < suctionEnd) {
+            setVacuumPhase("sucking");
+            setVacuumExtension(vacuumTargetExtension);
+            updateVacuumLetters(elapsed - config.vacuumRiseDuration);
+          } else if (elapsed < retractEnd) {
+            setVacuumPhase("retracting");
+            hideVacuumLetters();
+            setVacuumExtension(
+              vacuumTargetExtension *
+                (1 -
+                  easeInCubic(
+                    (elapsed - suctionEnd) / config.vacuumRetractDuration,
+                  )),
+            );
+          } else {
+            removeVacuumElement();
+            beginLaunchPhase(time);
+          }
+
+          setLayerPosition(launchCenter, 0);
+          break;
+        }
         case "launching": {
           if (!launchCenter) {
             settleFlight(new Error("Rocket launch position is unavailable."));
@@ -2526,9 +3256,223 @@ export function ContactSection({
           if (
             elapsed >= CONTACT_ROCKET_FLIGHT_CONFIG.landedDuration
           ) {
-            settleFlight(undefined, true);
+            if (vacuumLetters.length > 0) {
+              beginDumpPhase(time);
+              break;
+            }
+            beginDepartPhase(time);
+            break;
+          }
+          break;
+        }
+        case "dumping": {
+          const config = CONTACT_ROCKET_FLIGHT_CONFIG;
+          const elapsed = Math.max(0, time - phaseStartedAt);
+          const pourStart = config.dumpLiftDuration;
+          const lowerStart =
+            pourStart + config.dumpPourDuration + config.dumpPourTail;
+          const end = lowerStart + config.dumpLowerDuration;
+          const lift =
+            elapsed < pourStart
+              ? config.dumpLift * easeOutCubic(elapsed / pourStart)
+              : elapsed < lowerStart
+                ? config.dumpLift +
+                  Math.sin((elapsed - pourStart) / 140) * 0.8
+                : config.dumpLift *
+                  (1 -
+                    easeInOutCubic(
+                      clamp(
+                        (elapsed - lowerStart) / config.dumpLowerDuration,
+                        0,
+                        1,
+                      ),
+                    ));
+
+          if (flightLayer) {
+            if (flightLayer.dataset.flightAnchor === "planet") {
+              positionLandedRocketOnPlanet(flightLayer, -lift);
+            } else {
+              attachLandedRocketToPlanet(flightLayer, -lift);
+            }
+          }
+
+          const planet = getLivePlanetMetrics();
+          updateDumpLetters(
+            elapsed - pourStart,
+            time,
+            planet.center,
+            planet.radius || planetRadius,
+            lift,
+          );
+
+          if (elapsed >= end && dumpLetters.every((dump) => dump.done)) {
+            beginDepartPhase(time);
+            break;
+          }
+          break;
+        }
+        case "departing": {
+          const config = CONTACT_ROCKET_FLIGHT_CONFIG;
+          const live = getLivePlanetMetrics();
+          const seat = getLandingPoint(live.center, live.radius || planetRadius);
+          const base = {
+            x: seat.x + departSeatOffset.x,
+            y: seat.y + departSeatOffset.y,
+          };
+          const progress = clamp(
+            (time - phaseStartedAt) / config.returnIgnitionDuration,
+            0,
+            1,
+          );
+          const compression = Math.sin(progress * Math.PI) * 4.5;
+
+          setLayerPhase("ignition");
+          setLayerPosition(
+            { x: base.x, y: base.y + compression },
+            config.counterclockwiseTurn,
+            1 - Math.sin(progress * Math.PI) * 0.025,
+          );
+
+          if (progress >= 1) {
+            beginHomeboundPhase(time);
+          }
+          break;
+        }
+        case "homebound": {
+          const config = CONTACT_ROCKET_FLIGHT_CONFIG;
+          let plan = returnPlan;
+          if (!plan) {
+            beginHomeboundPhase(time);
+            break;
+          }
+
+          if (
+            (geometryDirty ||
+              plan.geometryRevision !==
+                orbitClockRef.current.geometryRevision) &&
+            time - lastPlanRebuildAt > 180 &&
+            currentCenter
+          ) {
+            const slot = measureSlotCenter() ?? plan.slot;
+            const travelled = clamp(
+              getRocketDistanceAtTime(
+                (time - plan.startTime) * config.returnSpeedScale,
+              ) - plan.distanceOffset,
+              0,
+              plan.cruiseLength,
+            );
+
+            if (
+              time < plan.flareStartTime &&
+              plan.cruiseLength - travelled >= 80
+            ) {
+              returnPlan = buildReturnPlan(
+                plan.startTime,
+                currentCenter,
+                {
+                  x: Math.cos(rocketFlightAngleRef.current),
+                  y: Math.sin(rocketFlightAngleRef.current),
+                },
+                slot,
+                plan.distanceOffset + travelled,
+              );
+            } else {
+              const delta = {
+                x: slot.x - plan.slot.x,
+                y: slot.y - plan.slot.y,
+              };
+              const shift = (point: ContactPoint) => ({
+                x: point.x + delta.x,
+                y: point.y + delta.y,
+              });
+              returnPlan = {
+                ...plan,
+                p0: shift(plan.p0),
+                p1: shift(plan.p1),
+                p2: shift(plan.p2),
+                p3: shift(plan.p3),
+                q0: shift(plan.q0),
+                q1: shift(plan.q1),
+                q2: shift(plan.q2),
+                q3: shift(plan.q3),
+                slot,
+                geometryRevision: orbitClockRef.current.geometryRevision,
+              };
+            }
+            plan = returnPlan ?? plan;
+            launchCenter = slot;
+            lastPlanRebuildAt = time;
+            geometryDirty = false;
+          }
+
+          const scaledElapsed = (time - plan.startTime) * config.returnSpeedScale;
+          let distance: number;
+          let progress = 0;
+          if (time < plan.flareStartTime) {
+            distance = clamp(
+              getRocketDistanceAtTime(scaledElapsed) - plan.distanceOffset,
+              0,
+              plan.cruiseLength,
+            );
+            setLayerPhase("flying");
+          } else {
+            progress = clamp(
+              (time - plan.flareStartTime) / Math.max(1, plan.flareDuration),
+              0,
+              1,
+            );
+            distance =
+              plan.cruiseLength +
+              plan.flareLength *
+                easeOutPower(
+                  progress,
+                  config.descentDecelerationScale,
+                );
+            setLayerPhase(progress < 0.4 ? "flying" : "landing");
+          }
+
+          const pose = getReturnPose(plan, distance);
+          setLayerPosition(pose.point, pose.angle);
+
+          if (time >= plan.flareStartTime && progress >= 1) {
+            dockingStartAngle = rocketFlightAngleRef.current;
+            flightStateRef.current = "docking";
+            phaseStartedAt = time;
+            setLayerPhase("complete");
+          }
+          break;
+        }
+        case "docking": {
+          const config = CONTACT_ROCKET_FLIGHT_CONFIG;
+          if (geometryDirty) {
+            launchCenter = measureSlotCenter() ?? launchCenter;
+            geometryDirty = false;
+          }
+
+          const slot = launchCenter ?? returnPlan?.slot;
+          if (!slot) {
+            settleFlight();
             return;
           }
+
+          const progress = clamp(
+            (time - phaseStartedAt) / config.returnDockingDuration,
+            0,
+            1,
+          );
+          if (progress >= 1) {
+            setLayerPosition(slot, 0);
+            settleFlight();
+            return;
+          }
+
+          setLayerPosition(
+            {
+              x: slot.x + Math.sin(progress * Math.PI) * config.returnDockingSlide,
+              y: slot.y,
+            },
+            lerpAngle(dockingStartAngle, 0, easeOutCubic(progress)),
+          );
           break;
         }
         case "complete": {
@@ -2582,6 +3526,7 @@ export function ContactSection({
         flightStateRef.current = "launching";
         phaseStartedAt = performance.now();
         activePlan = null;
+        returnPlan = null;
         returningToForm = false;
         geometryDirty = false;
 
@@ -2655,13 +3600,88 @@ export function ContactSection({
           rocketOverlay.appendChild(flightLayer);
           rocketFlightLayerRef.current = flightLayer;
 
+          const messageInput = form.elements.namedItem("message");
+          const messageField =
+            messageInput instanceof HTMLTextAreaElement ? messageInput : null;
+          if (messageField) {
+            const visibleRocketWidth =
+              (rocketImageBounds.width *
+                (CONTACT_ROCKET_PNG_VISIBLE_RIGHT -
+                  CONTACT_ROCKET_PNG_VISIBLE_LEFT)) /
+              CONTACT_ROCKET_PNG_WIDTH;
+            const visibleRocketCenterX =
+              rocketImageBounds.left +
+              (((CONTACT_ROCKET_PNG_VISIBLE_LEFT +
+                CONTACT_ROCKET_PNG_VISIBLE_RIGHT) /
+                2) /
+                CONTACT_ROCKET_PNG_WIDTH) *
+                rocketImageBounds.width;
+            const headWidth =
+              visibleRocketWidth *
+              CONTACT_ROCKET_FLIGHT_CONFIG.vacuumHeadWidthScale;
+            const neckWidth = Math.max(
+              10,
+              headWidth * CONTACT_ROCKET_FLIGHT_CONFIG.vacuumNeckWidthScale,
+            );
+            const textareaRect = messageField.getBoundingClientRect();
+            vacuumTargetExtension = Math.max(
+              0,
+              launchCenter.y -
+                (textareaRect.bottom -
+                  CONTACT_ROCKET_FLIGHT_CONFIG.vacuumMouthOverlap +
+                  CONTACT_ROCKET_FLIGHT_CONFIG.vacuumHeadHeight),
+            );
+            vacuumMouth = {
+              x: visibleRocketCenterX,
+              y:
+                textareaRect.bottom -
+                CONTACT_ROCKET_FLIGHT_CONFIG.vacuumMouthOverlap +
+                2,
+            };
+
+            const vacuum = document.createElement("span");
+            vacuum.className = "contact-flight-vacuum";
+            vacuum.setAttribute("aria-hidden", "true");
+            vacuum.style.left = `${visibleRocketCenterX - artworkBounds.left}px`;
+            vacuum.style.setProperty("--vacuum-width", `${headWidth}px`);
+            vacuum.style.setProperty("--vacuum-neck-width", `${neckWidth}px`);
+            vacuum.style.setProperty(
+              "--vacuum-head-height",
+              `${CONTACT_ROCKET_FLIGHT_CONFIG.vacuumHeadHeight}px`,
+            );
+            vacuum.style.setProperty("--vacuum-extension", "0px");
+            const vacuumNeck = document.createElement("span");
+            vacuumNeck.className = "contact-flight-vacuum__neck";
+            const vacuumHead = document.createElement("span");
+            vacuumHead.className = "contact-flight-vacuum__head";
+            const vacuumMouthSlot = document.createElement("span");
+            vacuumMouthSlot.className = "contact-flight-vacuum__mouth";
+            vacuumHead.appendChild(vacuumMouthSlot);
+            vacuum.append(vacuumNeck, vacuumHead);
+            flightLayer.appendChild(vacuum);
+            vacuumElement = vacuum;
+            vacuumCurrentExtension = 0;
+
+            vacuumLetters = createVacuumLetters(messageField, vacuumMouth);
+            if (vacuumLetters.length === 0) {
+              removeVacuumElement();
+            }
+          }
+
           // Hiding the original after the clone is in place preserves the
           // form's layout while the fixed layer takes over visually.
           rocketButton.style.visibility = "hidden";
           rocketButton.style.pointerEvents = "none";
-          setLayerPhase("preparing");
-          setLayerPosition(launchCenter, 0);
-          rocketSmokeStartRef.current?.();
+          if (vacuumLetters.length > 0) {
+            flightStateRef.current = "vacuuming";
+            phaseStartedAt = performance.now();
+            setLayerPhase("vacuum");
+            setLayerPosition(launchCenter, 0);
+          } else {
+            setLayerPhase("preparing");
+            setLayerPosition(launchCenter, 0);
+            rocketSmokeStartRef.current?.();
+          }
           animationFrame = window.requestAnimationFrame(renderFrame);
         } catch (error) {
           settleFlight(error);
@@ -2718,6 +3738,39 @@ export function ContactSection({
     setAnnouncement(
       `${label} requires configuration before this destination can open.`,
     );
+  };
+
+  const focusContactForm = () => {
+    formRef.current?.querySelector<HTMLInputElement>('input[name="name"]')?.focus();
+  };
+
+  const requestResume = useCallback(() => {
+    const message = formRef.current?.elements.namedItem("message");
+    if (message instanceof HTMLTextAreaElement) {
+      if (!message.value.trim() || message.value.trim() === DEFAULT_CONTACT_MESSAGE) {
+        message.value = "Hi Ray, I'd love to see your résumé.";
+      }
+      message.focus();
+      setAnnouncement("My résumé is available on request. Add your name and email to get in touch.");
+    }
+  }, []);
+
+  const openOrbitDestination = (orbit: OrbitDefinition) => {
+    if (orbit.name === "email") {
+      if (CONTACT_EMAIL) window.location.href = `mailto:${CONTACT_EMAIL}`;
+      else focusContactForm();
+    } else if (orbit.name === "resume") {
+      if (RESUME_URL) window.open(RESUME_URL, "_blank", "noopener,noreferrer");
+      else requestResume();
+    } else {
+      announceConfiguration(orbit.label);
+    }
+  };
+
+  const orbitActionLabel = (orbit: OrbitDefinition) => {
+    if (orbit.name === "email") return "Email Ray Xu";
+    if (orbit.name === "resume") return RESUME_URL ? "View Ray Xu's résumé" : "Request Ray Xu's résumé";
+    return `${orbit.label}: configuration required`;
   };
 
   const clearFieldError = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -2788,6 +3841,7 @@ export function ContactSection({
   return (
     <section
       className="contact-experience"
+      data-tour-target="contact"
       ref={stageRef}
       aria-labelledby="contact-title"
     >
@@ -2821,10 +3875,10 @@ export function ContactSection({
       <canvas ref={smokeCanvasRef} className="contact-smoke-canvas" aria-hidden="true" />
 
       <div className="contact-intro">
-        <h2 id="contact-title">
-          Let’s connect.<span aria-hidden="true">_</span>
-        </h2>
-        <p>I’m always open to new ideas, opportunities, and collaborations.</p>
+        <div className="contact-recruiter">
+          <h2 id="contact-title" tabIndex={-1} data-tour-focus-block="contact-intro"><TourPageText>Want to talk?</TourPageText><span aria-hidden="true">_</span></h2>
+          <p>I'm currently looking for software engineering opportunities.</p>
+        </div>
 
         <form
           aria-labelledby="contact-form-note"
@@ -2877,6 +3931,7 @@ export function ContactSection({
             <textarea
               aria-describedby={errors.message ? "contact-message-error" : undefined}
               aria-invalid={Boolean(errors.message)}
+              defaultValue={DEFAULT_CONTACT_MESSAGE}
               name="message"
               onInput={clearFieldError}
               placeholder="Your message"
@@ -2983,32 +4038,34 @@ export function ContactSection({
                 orbitRefs.current[index] = node;
               }}
             >
-              {orbit.name === "linkedin" ? (
+              {orbit.name === "linkedin" || orbit.name === "github" || orbit.name === "schedule" ? (
                 <a
                   className={`contact-planet contact-planet--${orbit.name}`}
-                  href={LINKEDIN_URL}
+                  data-tour-focus-block={`contact-planet-${orbit.name}`}
+                  href={
+                    orbit.name === "linkedin"
+                      ? LINKEDIN_URL
+                      : orbit.name === "github"
+                        ? GITHUB_URL
+                        : SCHEDULE_URL
+                  }
                   target="_blank"
                   rel="noreferrer"
-                  aria-label="Open Ray Xu's LinkedIn profile"
-                >
-                  {orbit.icon}
-                </a>
-              ) : orbit.name === "github" ? (
-                <a
-                  className={`contact-planet contact-planet--${orbit.name}`}
-                  href={GITHUB_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Open Ray Xu's GitHub profile"
+                  aria-label={
+                    orbit.name === "schedule"
+                      ? "Book a meeting with Ray Xu"
+                      : `Open Ray Xu's ${orbit.label} profile`
+                  }
                 >
                   {orbit.icon}
                 </a>
               ) : (
                 <button
                   className={`contact-planet contact-planet--${orbit.name}`}
+                  data-tour-focus-block={`contact-planet-${orbit.name}`}
                   type="button"
-                  aria-label={`${orbit.label}: configuration required`}
-                  onClick={() => announceConfiguration(orbit.label)}
+                  aria-label={orbitActionLabel(orbit)}
+                  onClick={() => openOrbitDestination(orbit)}
                   ref={(node) => {
                     if (orbit.name === "email") {
                       emailPlanetRef.current = node;
@@ -3019,32 +4076,44 @@ export function ContactSection({
                 </button>
               )}
 
-              {orbit.name === "linkedin" || orbit.name === "github" ? (
+              {orbit.name === "linkedin" || orbit.name === "github" || orbit.name === "schedule" ? (
                 <a
                   className="contact-orbit-item__label"
-                  href={orbit.name === "linkedin" ? LINKEDIN_URL : GITHUB_URL}
+                  data-tour-focus-block={`contact-planet-${orbit.name}`}
+                  href={
+                    orbit.name === "linkedin"
+                      ? LINKEDIN_URL
+                      : orbit.name === "github"
+                        ? GITHUB_URL
+                        : SCHEDULE_URL
+                  }
                   target="_blank"
                   rel="noreferrer"
-                  aria-label={`Open Ray Xu's ${orbit.label} profile`}
+                  aria-label={
+                    orbit.name === "schedule"
+                      ? "Book a meeting with Ray Xu"
+                      : `Open Ray Xu's ${orbit.label} profile`
+                  }
                 >
                   <strong>
-                    {orbit.label}
+                    {orbit.name === "linkedin" || orbit.name === "schedule"
+                      ? <TourPageText inline>{orbit.label}</TourPageText>
+                      : orbit.label}
                     <ArrowUpRight aria-hidden="true" />
                   </strong>
-                  <small>{orbit.detail}</small>
                 </a>
               ) : (
                 <button
                   className="contact-orbit-item__label"
+                  data-tour-focus-block={`contact-planet-${orbit.name}`}
                   type="button"
-                  aria-label={`${orbit.label}: configuration required`}
-                  onClick={() => announceConfiguration(orbit.label)}
+                  aria-label={orbitActionLabel(orbit)}
+                  onClick={() => openOrbitDestination(orbit)}
                 >
                   <strong>
                     {orbit.label}
                     <ArrowUpRight aria-hidden="true" />
                   </strong>
-                  <small>{orbit.detail}</small>
                 </button>
               )}
             </div>

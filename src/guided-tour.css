@@ -1,0 +1,363 @@
+.guided-tour-shade {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  color: rgb(32 26 21 / 48%);
+  pointer-events: none;
+}
+
+.guided-tour-spotlight {
+  fill: none;
+  stroke: #a35133;
+  stroke-width: 1.5;
+}
+
+.guided-tour-planet { color: #a35133; }
+.guided-tour-planet__track,
+.guided-tour-planet__pulse,
+.guided-tour-planet__arc { fill: none; stroke: currentColor; }
+.guided-tour-planet__track { stroke-width: 1; opacity: 0.35; }
+.guided-tour-planet__pulse {
+  stroke-width: 1.5;
+  transform-origin: 0 0;
+  animation: tour-planet-pulse 1200ms cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+.guided-tour-planet__orbit {
+  transform-origin: 0 0;
+  animation: tour-planet-orbit 2400ms linear infinite;
+}
+.guided-tour-planet__arc { stroke-width: 2; stroke-linecap: round; }
+.guided-tour-planet__satellite { fill: currentColor; }
+.contact-planet[data-tour-planet-active] { filter: brightness(1.16) saturate(1.08); }
+html[data-theme="dark"] .guided-tour-planet { color: #edc69b; }
+
+@keyframes tour-planet-pulse {
+  from { transform: scale(0.95); opacity: 0.7; }
+  to { transform: scale(1.28); opacity: 0; }
+}
+@keyframes tour-planet-orbit {
+  from { transform: rotate(-90deg); }
+  to { transform: rotate(270deg); }
+}
+
+/* Measure tour highlights at the final position, without the project entrance lift. */
+#results[data-active-tour-stop="keyboard"] [data-tour-target="keyboard"] :is(.projects-feature__copy, .projects-feature__metrics),
+#results[data-active-tour-stop="aircad"] [data-tour-target="aircad"] :is(.projects-feature__copy, .projects-feature__metrics) {
+  animation: none;
+}
+
+.tour-typed-text { display: inline-grid; width: 100%; vertical-align: top; }
+.tour-typed-text__reserve,
+.tour-typed-text__visible { grid-area: 1 / 1; min-width: 0; overflow-wrap: inherit; }
+.tour-typed-text__reserve { visibility: hidden; }
+.tour-typed-text__visible[data-glyph-copy] { visibility: hidden; }
+.tour-typed-text__visible[data-glyph-copy] .tour-typed-text__glyph:not(.tour-typed-text__glyph--unrevealed),
+.tour-typed-text__visible[data-glyph-copy] .tour-typed-text__cursor-position,
+.tour-typed-text__visible[data-glyph-copy] strong[data-complete="true"] { visibility: visible; }
+.tour-typed-text__glyph--unrevealed { visibility: hidden; }
+.tour-typed-text .tour-typed-text__word { white-space: nowrap; }
+.tour-typed-text__copy { position: relative; display: block; width: 100%; }
+.tour-typed-text__copy-content { display: block; }
+.tour-typed-text__cursor-position {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.tour-typed-text__cursor-position > .tour-typed-cursor { position: absolute; top: 0; left: 0; }
+/* Draw the cursor at the baseline without changing line height or wrapping. */
+.tour-typed-cursor {
+  position: relative;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: baseline;
+  animation: tour-cursor-blink 900ms step-end infinite;
+}
+.tour-typed-cursor::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  bottom: -0.05em;
+  width: 1.5px;
+  height: 0.95em;
+  background: currentColor;
+}
+.tour-typed-cursor.is-paused { animation: none; }
+
+.tour-page-text,
+.tour-page-text__original { display: contents; }
+
+/* Hide only the current stop's copy; its original still reserves the layout. */
+:is(
+  #results[data-active-tour-stop="identity"] [data-tour-target="identity"],
+  #results[data-active-tour-stop="positioning"] [data-tour-target="positioning"],
+  #results[data-active-tour-stop="keyboard"] [data-tour-target="keyboard"],
+  #results[data-active-tour-stop="aircad"] [data-tour-target="aircad"],
+  #results[data-active-tour-stop="experience"] [data-tour-target="experience"],
+  #results[data-active-tour-stop="contact"] [data-tour-target="contact"]
+) .tour-page-text {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+:is(
+  #results[data-active-tour-stop="identity"] [data-tour-target="identity"],
+  #results[data-active-tour-stop="positioning"] [data-tour-target="positioning"],
+  #results[data-active-tour-stop="keyboard"] [data-tour-target="keyboard"],
+  #results[data-active-tour-stop="aircad"] [data-tour-target="aircad"],
+  #results[data-active-tour-stop="experience"] [data-tour-target="experience"],
+  #results[data-active-tour-stop="contact"] [data-tour-target="contact"]
+) .tour-page-text__original {
+  display: block;
+  grid-area: 1 / 1;
+  opacity: 0;
+}
+#results[data-active-tour-stop] .tour-page-text--inline { display: inline-grid; }
+/* Reserve the full animated copy too: glyph spans can wrap differently from plain text.
+   Both copies share one grid cell, while the cursor stays out of the layout. */
+.tour-page-text__typed { display: block; grid-area: 1 / 1; min-width: 0; pointer-events: none; }
+#results[data-active-tour-stop="contact"] .contact-recruiter h2 > span[aria-hidden] { display: none; }
+
+/* Recognition arrives as a whole, alongside AirCAD's introduction. */
+#results[data-active-tour-stop="aircad"] [data-tour-target="aircad"] .aircad-recognition {
+  animation: tour-recognition-reveal 700ms 150ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+html[data-tour-paused] .aircad-recognition { animation-play-state: paused; }
+@keyframes tour-recognition-reveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #results[data-active-tour-stop="aircad"] [data-tour-target="aircad"] .aircad-recognition {
+    animation: none;
+  }
+}
+
+.guided-tour {
+  --tour-ink: #302d2a;
+  --tour-muted: #71675e;
+  --tour-line: #e6e0d8;
+  --tour-accent: #97462d;
+  position: fixed;
+  z-index: 1001;
+  right: max(24px, env(safe-area-inset-right));
+  bottom: max(24px, env(safe-area-inset-bottom));
+  width: min(350px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  padding: 14px 20px 12px;
+  border-radius: 16px;
+  color: var(--tour-ink);
+  background: #fffefa;
+  box-shadow: 0 12px 40px rgb(45 31 20 / 18%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  text-align: left;
+  scrollbar-color: var(--tour-line) transparent;
+  scrollbar-width: thin;
+  animation: tour-arrive 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.guided-tour:focus { outline: none; }
+.guided-tour button { padding: 0; border: 0; color: inherit; background: transparent; font: inherit; cursor: pointer; }
+.guided-tour button:focus-visible {
+  outline: 2px solid var(--tour-accent);
+  outline-offset: 3px;
+}
+
+.guided-tour__progress-row,
+.guided-tour__navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.guided-tour__dots { display: flex; gap: 0; margin-left: -7px; }
+.guided-tour__dot {
+  display: grid;
+  width: 28px;
+  height: 32px;
+  place-items: center;
+  border-radius: 6px;
+}
+.guided-tour__dot span {
+  width: 8px;
+  height: 8px;
+  border: 1px solid #97887b;
+  border-radius: 50%;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+.guided-tour__dot.is-visited span { border-color: var(--tour-accent); background: #dbc2b5; }
+.guided-tour__dot[aria-current="step"] span { border-color: var(--tour-accent); background: var(--tour-accent); transform: scale(1.2); }
+.guided-tour__dot:hover { background: #f4efe8; }
+.guided-tour__skip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 4px;
+  color: var(--tour-muted);
+  font-size: 12px;
+}
+.guided-tour__skip:hover { color: var(--tour-accent); }
+
+.guided-tour__navigation {
+  border-top: 1px solid var(--tour-line);
+  padding-top: 8px;
+}
+.guided-tour__navigation button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.guided-tour__navigation button:disabled { color: var(--tour-muted); opacity: 0.45; cursor: default; }
+.guided-tour__navigation button:not(:disabled):hover { background: #f4efe8; }
+.guided-tour__navigation .guided-tour__next { color: var(--tour-accent); }
+.guided-tour__hint { margin: 7px 0 0; color: var(--tour-muted); font-size: 11px; line-height: 1.4; }
+.guided-tour__playback { display: flex; align-items: center; gap: 2px; }
+
+.guided-tour-video {
+  position: fixed;
+  z-index: 1200;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background: #090a0c;
+}
+.guided-tour-video:fullscreen { width: 100vw; height: 100dvh; }
+.guided-tour-video--preparing { visibility: hidden; pointer-events: none; }
+.guided-tour-video__player {
+  display: block;
+  width: 100%;
+  height: calc(100% - 136px);
+  margin: 0;
+  object-fit: contain;
+  background: #090a0c;
+}
+.guided-tour-video--captioned {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto calc(152px + env(safe-area-inset-bottom, 0px));
+}
+.guided-tour-video--captioned .guided-tour-video__player {
+  min-height: 0;
+  height: 100%;
+}
+.guided-tour-video__caption {
+  margin: 0;
+  padding: 16px 24px;
+  color: #f2e9df;
+  font-family: "Polaris", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(28px, 3.2vw, 42px);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  text-align: center;
+  text-wrap: balance;
+}
+.guided-tour-video__caption span { color: #f0ad88; }
+.guided-tour.guided-tour--video {
+  --tour-ink: #f2e9df;
+  --tour-muted: #c5b7a9;
+  --tour-line: #4c4039;
+  --tour-accent: #f0ad88;
+  position: absolute;
+  width: min(420px, calc(100vw - 32px));
+  padding: 8px 16px;
+  color: var(--tour-ink);
+  background: #251f1b;
+  box-shadow: none;
+  animation: none;
+}
+.guided-tour--video .guided-tour__navigation { padding-top: 4px; }
+.guided-tour--video button:not(:disabled):hover { background: #3a2f28; }
+
+html[data-theme="dark"] .guided-tour {
+  --tour-ink: #f2e9df;
+  --tour-muted: #c5b7a9;
+  --tour-line: #4c4039;
+  --tour-accent: #f0ad88;
+  background: #251f1b;
+}
+html[data-theme="dark"] .guided-tour button:hover { background: #3a2f28; }
+html[data-theme="dark"] .guided-tour-spotlight { stroke: #f0ad88; }
+
+/* Reserve space below real content for the floating controls. */
+html[data-tour-present] .search-panel__inner { padding-bottom: 180px; }
+html[data-tour-present] .browser-frame { overflow-y: auto; }
+html[data-tour-present] .hero-content,
+html[data-tour-present] #portfolioSearchRoot,
+html[data-tour-present] .search-panel,
+html[data-tour-present] .search-panel__inner { height: auto; }
+
+.all-overview__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 28px; }
+.all-overview__tour {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.all-overview__tour { padding: 0; border: 0; color: var(--all-accent); background: transparent; cursor: pointer; }
+.all-overview__tour:hover:not(:disabled) { text-decoration: underline; text-underline-offset: 4px; }
+.all-overview__tour:disabled { color: var(--all-muted); cursor: default; }
+.all-overview__tour-completed { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+.all-overview__tour-completed > span { display: inline-flex; align-items: center; gap: 6px; color: var(--all-muted); font-size: 13px; }
+.all-overview__tour-completed .all-overview__tour { font-size: 12px; }
+.all-overview__tour-note { margin: 8px 0 0; color: var(--all-muted); font-size: 11px; line-height: 1.5; }
+.all-overview__actions :focus-visible { outline: 2px solid #a35133; outline-offset: 4px; }
+
+.projects-tour-metrics { display: flex; flex-wrap: wrap; gap: 4px 8px; margin: 12px 0 0; padding: 6px 0; color: #275948; font-size: 13px; line-height: 1.5; font-weight: 600; }
+.projects-tour-metrics b { color: #8a928c; font-weight: 400; }
+html[data-tour-stop="keyboard"] .projects-tour-metrics { display: none; }
+html[data-tour-stop="keyboard"] .projects-feature--keyboard .projects-feature__settings,
+html[data-tour-stop="aircad"] .projects-feature--aircad .projects-feature__settings { visibility: hidden; }
+html[data-theme="dark"] .projects-tour-metrics { color: #a8dcca; }
+
+.contact-recruiter { position: relative; z-index: 2; }
+
+@keyframes tour-arrive {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes tour-cursor-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+@media (max-width: 639px) {
+  .guided-tour { right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); width: calc(100vw - 32px); padding: 10px 16px; }
+  .guided-tour__hint { margin-top: 4px; }
+  html[data-tour-stop="keyboard"] .projects-feature--keyboard,
+  html[data-tour-stop="aircad"] .projects-feature--aircad { gap: 16px; padding: 16px; }
+  html[data-tour-stop] .projects-feature--aircad { margin-top: 24px; }
+  html[data-tour-stop] .projects-divider { translate: none; }
+  html[data-tour-stop="keyboard"] .projects-feature--keyboard :is(.projects-feature__badge-row, .projects-tech-chips, .projects-feature__actions, .keyboard-doodles),
+  html[data-tour-stop="aircad"] .projects-feature--aircad :is(.projects-tech-chips, .projects-feature__actions, .aircad-doodles) { display: none; }
+  html[data-tour-stop="keyboard"] .projects-feature--keyboard .projects-feature__media-frame,
+  html[data-tour-stop="aircad"] .projects-feature--aircad .projects-feature__media-frame { padding-block: 0; }
+  html[data-tour-stop="aircad"] .projects-feature--aircad .projects-feature__media { width: 100%; }
+  html[data-tour-stop="keyboard"] .projects-feature__metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  html[data-tour-stop="keyboard"] .projects-metric { display: block; min-height: 56px; }
+  html[data-tour-stop="keyboard"] :is(.projects-metric__icon, .projects-feature__doodle) { display: none; }
+  html[data-tour-stop="keyboard"] .projects-metric strong { display: block; font-size: 22px; line-height: 1.1; }
+  html[data-tour-stop="keyboard"] .projects-metric small { display: block; margin-top: 5px; font-size: 10px; line-height: 1.3; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guided-tour { animation: none; }
+  .guided-tour__dot span { transition: none; }
+  .tour-typed-cursor { animation: none; }
+  .guided-tour-planet__pulse { animation: none; opacity: 0.5; }
+  .guided-tour-planet__orbit { animation: none; }
+}

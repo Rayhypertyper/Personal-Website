@@ -1,0 +1,174 @@
+/* AirCAD borrows the featured project's typography, controls, and entrance. */
+html[data-projects-page="true"] .browser-frame {
+  overflow-y: auto;
+}
+
+html[data-projects-page="true"] .hero-content,
+html[data-projects-page="true"] #portfolioSearchRoot,
+html[data-projects-page="true"] .search-panel,
+html[data-projects-page="true"] .search-panel__inner {
+  height: auto;
+}
+
+html[data-projects-page="true"] .social-dock {
+  display: none;
+}
+
+html[data-projects-page="true"] .projects-showcase {
+  padding-bottom: 0;
+  margin-bottom: clamp(-60px, -3.9vw, -24px);
+}
+
+html[data-projects-page="true"] .search-panel {
+  padding-bottom: 4px;
+}
+
+.projects-showcase .projects-divider {
+  position: relative;
+  z-index: 1;
+  translate: 0 -16px;
+}
+
+.projects-showcase .projects-feature--aircad {
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.7fr);
+  grid-template-areas: "copy media";
+  min-height: 0;
+  /* Pull the whole AirCAD feature closer to the divider without crowding mobile. */
+  margin-top: clamp(-108px, calc(-3.9vw - 48px), -56px);
+  padding-block: calc(clamp(24px, 3.4vw, 48px) - 20px) 4px;
+}
+
+.projects-feature--aircad .projects-feature__copy h2 {
+  margin-top: 0;
+}
+
+.projects-feature--aircad .projects-feature__media-frame {
+  position: relative;
+  grid-area: media;
+  align-self: center;
+  padding-block: 64px 4px;
+}
+
+.projects-feature--aircad > .aircad-doodles {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.aircad-doodle {
+  position: absolute;
+  display: block;
+  overflow: visible;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.aircad-doodle__wash {
+  fill: currentColor;
+  fill-opacity: 0.08;
+  stroke: none;
+}
+
+.aircad-doodle__hidden-edge {
+  stroke-dasharray: 3 5;
+  opacity: 0.55;
+}
+
+.aircad-doodle__detail {
+  stroke-width: 1.8;
+}
+
+.aircad-doodle--sun {
+  bottom: 8px;
+  left: 11%;
+  width: 50px;
+  color: #e7aa36;
+  transform: rotate(-12deg);
+}
+
+.aircad-doodle--keycap {
+  top: 16%;
+  left: 29%;
+  width: 74px;
+  color: #22b778;
+  transform: rotate(12deg);
+}
+
+.aircad-doodle--cube {
+  top: 64%;
+  right: -16px;
+  left: auto;
+  width: 84px;
+  color: #1688ed;
+  transform: rotate(-8deg);
+}
+
+.aircad-doodle--axes {
+  top: 52%;
+  left: -12px;
+  width: 54px;
+  color: #229d9a;
+  transform: rotate(6deg);
+}
+
+.projects-feature--aircad .projects-feature__media {
+  align-self: center;
+  width: 90%;
+  aspect-ratio: 16 / 9;
+}
+
+.projects-feature--aircad .projects-feature__video {
+  aspect-ratio: 16 / 9;
+  clip-path: none;
+}
+
+@media (min-width: 841px) {
+  .projects-feature--aircad .projects-feature__copy,
+  .projects-feature--aircad > .aircad-doodles {
+    translate: 0 -20px;
+  }
+}
+
+@media (min-width: 841px) and (max-width: 1180px) {
+  .aircad-doodle--sun { width: 40px; }
+  .aircad-doodle--cube { right: -10px; width: 64px; }
+  .aircad-doodle--keycap { top: 12px; width: 60px; }
+  .aircad-doodle--axes { left: -18px; width: 40px; }
+}
+
+@media (max-width: 840px) {
+  .projects-showcase .projects-feature--aircad {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "copy" "media";
+  }
+
+  /* Keep the stacked layout's drawings in the title space and side gutters. */
+  .aircad-doodle--sun { left: 10%; width: 40px; }
+  .aircad-doodle--cube { top: 62%; right: -8px; left: auto; width: 64px; }
+  .aircad-doodle--keycap { top: -10px; right: 4%; left: auto; width: 60px; }
+  .aircad-doodle--axes { top: 21%; left: -6px; width: 28px; }
+}
+
+@media (max-width: 639px) {
+  .projects-feature--aircad .projects-feature__media-frame {
+    padding-block: 52px 4px;
+  }
+
+  .aircad-doodle--sun {
+    width: 36px;
+  }
+
+  .aircad-doodle--keycap {
+    width: 52px;
+  }
+
+  .aircad-doodle--cube {
+    width: 54px;
+  }
+
+  .aircad-doodle--axes { left: -8px; width: 26px; }
+}

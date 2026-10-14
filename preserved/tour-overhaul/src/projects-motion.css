@@ -1,0 +1,59 @@
+/* Each Projects mount rehearses one entrance, with no timers or hidden defaults. */
+.projects-showcase {
+  --projects-entrance-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.projects-showcase .projects-feature__media {
+  animation: projects-demo-open 640ms var(--projects-entrance-ease) both;
+}
+
+.projects-showcase .projects-feature__copy,
+.projects-showcase .projects-feature__metrics,
+.projects-showcase .projects-list__item {
+  animation: projects-content-arrive 460ms var(--projects-entrance-ease) both;
+}
+
+.projects-showcase .projects-feature__copy { animation-delay: 70ms; }
+.projects-showcase .projects-feature__metrics { animation-delay: 140ms; }
+.projects-showcase .projects-list__item:nth-child(1) { animation-delay: 180ms; }
+.projects-showcase .projects-list__item:nth-child(2) { animation-delay: 240ms; }
+.projects-showcase .projects-list__item:nth-child(3) { animation-delay: 300ms; }
+
+/* Keyboard interaction immediately reveals the focused control and its group. */
+.projects-showcase .projects-feature__media:focus-within,
+.projects-showcase .projects-feature__copy:focus-within,
+.projects-showcase .projects-list__item:focus-visible {
+  animation: none;
+}
+
+@keyframes projects-demo-open {
+  from {
+    opacity: 0;
+    clip-path: inset(0 8% 0 8% round 12px);
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 round 12px);
+    transform: none;
+  }
+}
+
+@keyframes projects-content-arrive {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes projects-content-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .projects-showcase .projects-feature__media,
+  .projects-showcase .projects-feature__copy,
+  .projects-showcase .projects-feature__metrics,
+  .projects-showcase .projects-list__item:nth-child(n) {
+    animation: projects-content-fade 120ms ease-out both;
+  }
+}

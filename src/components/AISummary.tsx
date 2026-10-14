@@ -1,4 +1,6 @@
 import { BrainCircuit, Code2, ScanEye, Sparkles } from "lucide-react";
+import { TourPageText } from "./TourPageText";
+import { TOUR_READING_CHARACTERS_PER_SECOND } from "../tour-config";
 
 type OverviewToken = {
   text: string;
@@ -7,13 +9,13 @@ type OverviewToken = {
 };
 
 const OVERVIEW_TOKENS: readonly OverviewToken[] = [
-  { text: "Ray builds software that makes technology more intuitive to use. His projects pair ", strong: false },
+  { text: "I build software that connects ", strong: false },
   { text: "computer vision", strong: true },
-  { text: " and ", strong: false },
-  { text: "machine learning", strong: true },
-  { text: " with ", strong: false },
-  { text: "full-stack development", strong: true },
-  { text: ", from camera-based input to spatial 3D design.", strong: false },
+  { text: ", ", strong: false },
+  { text: "ML", strong: true },
+  { text: ", and the ", strong: false },
+  { text: "physical world", strong: true },
+  { text: ".", strong: false },
 ];
 
 const skills = [
@@ -30,7 +32,8 @@ export function AISummary() {
         <h2 id="ai-overview-title">AI Overview</h2>
       </header>
 
-      <p className="ai-overview__copy">
+      <p className="ai-overview__copy" data-tour-target="positioning" data-tour-focus-block="positioning">
+        <TourPageText cps={TOUR_READING_CHARACTERS_PER_SECOND}>
         {OVERVIEW_TOKENS.map((token, index) =>
           token.strong ? (
             <strong key={index}>{token.text}</strong>
@@ -38,6 +41,7 @@ export function AISummary() {
             <span key={index}>{token.text}</span>
           ),
         )}
+        </TourPageText>
       </p>
 
       <div className="ai-overview__skills" aria-label="Areas of focus">

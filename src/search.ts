@@ -228,6 +228,10 @@ const normalize = (value: string) =>
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
 
+export function getFilterQuery(filter: FilterName) {
+  return filter === "All" ? "Ray Xu" : `Ray Xu ${filter}`;
+}
+
 const getTokens = (value: string) =>
   normalize(value)
     .split(" ")
@@ -318,7 +322,8 @@ const scoreEntry = (query: string, entry: SearchEntry) => {
 };
 
 export function findSearchMatch(query: string): SearchMatch {
-  const normalizedQuery = normalize(query);
+  // Section queries share this prefix; rank the section rather than Ray's name.
+  const normalizedQuery = normalize(query).replace(/^ray xu(?: |$)/, "").trim();
 
   if (!normalizedQuery) {
     return {
