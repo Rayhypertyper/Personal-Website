@@ -10,6 +10,7 @@ const KEYBOARD_CLIP: TourDemoSource = {
   title: "Invisible Keyboard",
   start: 42,
   end: 63,
+  playbackRate: 1.5,
 };
 
 export function KeyboardVideoIntro({ onComplete }: { onComplete: () => void }) {
