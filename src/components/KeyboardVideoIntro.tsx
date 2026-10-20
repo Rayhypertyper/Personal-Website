@@ -8,9 +8,9 @@ const KEYBOARD_CLIP: TourDemoSource = {
   src: "/invisible-keyboard-demo.mp4",
   poster: "/invisible-keyboard-intro-poster.jpg",
   title: "Invisible Keyboard",
-  start: 42,
+  start: 44,
   end: 63,
-  playbackRate: 1.5,
+  playbackRate: 1.65,
 };
 
 export function KeyboardVideoIntro({ onComplete }: { onComplete: () => void }) {

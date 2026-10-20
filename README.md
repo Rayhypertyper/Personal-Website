@@ -120,8 +120,8 @@ and browser-specific verification limits.
 
 ## Production build
 
-`/keyboard` opens a muted, full-viewport Invisible Keyboard clip from 0:42 to
-1:03 at the tour's 1.5× speed. It then uses the tour's zoom-out animation to reveal the
+`/keyboard` opens a muted, full-viewport Invisible Keyboard clip from 0:44 to
+1:03 at 1.65× speed. It then uses the tour's zoom-out animation to reveal the
 Projects page at `/projects` and stops. Escape skips the clip; reduced motion
 returns directly without the zoom. Both routes have static entry documents for
 direct visits and refreshes on GitHub Pages.
