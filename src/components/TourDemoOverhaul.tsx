@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
+import { AIRCAD_DEMO } from "../tour-config";
 
 export interface TourDemoSource {
   stopId: string;
@@ -7,6 +8,7 @@ export interface TourDemoSource {
   title: string;
   start: number;
   end?: number;
+  playbackRate?: number;
   origin?: HTMLElement;
 }
 interface TourDemoProps {
@@ -21,12 +23,13 @@ interface TourDemoProps {
   onFullscreenChange: (fullscreen: boolean) => void;
   onPlaybackBlocked: () => void;
   onEntered: () => void;
+  onBeforeExit?: () => void;
   onAdvance: () => void;
   presentation?: "tour" | "standalone";
   children?: ReactNode;
 }
 
-export function TourDemo({ source, active, paused, hidden, reducedMotion, stageRef, finishingRef, onPauseChange, onFullscreenChange, onPlaybackBlocked, onEntered, onAdvance, presentation = "tour", children }: TourDemoProps) {
+export function TourDemo({ source, active, paused, hidden, reducedMotion, stageRef, finishingRef, onPauseChange, onFullscreenChange, onPlaybackBlocked, onEntered, onBeforeExit, onAdvance, presentation = "tour", children }: TourDemoProps) {
   const standalone = presentation === "standalone";
   const entranceTimingScale = source.stopId === "keyboard" ? 0.5 : 1;
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -46,13 +49,13 @@ export function TourDemo({ source, active, paused, hidden, reducedMotion, stageR
   const [phase, setPhase] = useState("preparing");
   const [controlsRevealed, setControlsRevealed] = useState(false);
   const playbackStateRef = useRef({ active, paused, hidden });
-  const actionsRef = useRef({ onAdvance, onPlaybackBlocked, onFullscreenChange, onEntered });
+  const actionsRef = useRef({ onAdvance, onPlaybackBlocked, onFullscreenChange, onEntered, onBeforeExit });
   const controlsEnabled = controlsRevealed && active && !hidden && phase === "entered";
   const revealControls = () => {
     if (active && !hidden && phase === "entered") setControlsRevealed(true);
   };
   useEffect(() => { playbackStateRef.current = { active, paused, hidden }; }, [active, paused, hidden]);
-  useEffect(() => { actionsRef.current = { onAdvance, onPlaybackBlocked, onFullscreenChange, onEntered }; }, [onAdvance, onPlaybackBlocked, onFullscreenChange, onEntered]);
+  useEffect(() => { actionsRef.current = { onAdvance, onPlaybackBlocked, onFullscreenChange, onEntered, onBeforeExit }; }, [onAdvance, onPlaybackBlocked, onFullscreenChange, onEntered, onBeforeExit]);
   useEffect(() => {
     if (!active || hidden) setControlsRevealed(false);
   }, [active, hidden]);
@@ -116,7 +119,7 @@ export function TourDemo({ source, active, paused, hidden, reducedMotion, stageR
     const progress = progressRef.current;
     if (!video) return;
     const prepare = () => {
-      video.defaultPlaybackRate = standalone ? 1 : source.stopId === "aircad" ? 1.65 : source.stopId === "keyboard" ? 1.5 : 1;
+      video.defaultPlaybackRate = source.playbackRate ?? (standalone ? 1 : source.stopId === "aircad" ? AIRCAD_DEMO.playbackRate : source.stopId === "keyboard" ? 1.5 : 1);
       video.playbackRate = video.defaultPlaybackRate;
       video.currentTime = Math.min(source.start, Math.max(0, video.duration - 0.1));
       readyRef.current = true;
@@ -243,6 +246,7 @@ export function TourDemo({ source, active, paused, hidden, reducedMotion, stageR
     doneRef.current = true;
     finishingRef.current = true;
     pauseVideo();
+    actionsRef.current.onBeforeExit?.();
     const stage = stageRef.current;
     if (!stage || failedRef.current || reducedMotion || document.fullscreenElement === stage) {
       actionsRef.current.onAdvance();

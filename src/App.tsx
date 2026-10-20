@@ -7,6 +7,7 @@ import { AllOverview } from "./components/AllOverview";
 import { TourFloatingCTA } from "./components/TourFloatingCTA";
 import { ProjectsShowcase } from "./components/ProjectsShowcase";
 import { KeyboardVideoIntro } from "./components/KeyboardVideoIntro";
+import { AirCADVideoIntro } from "./components/AirCADVideoIntro";
 import { ExperienceTimeline } from "./components/ExperienceTimeline";
 import { AboutSection } from "./components/AboutSection";
 import { ContactSection } from "./components/ContactSection";
@@ -21,7 +22,7 @@ const ACTIVE_FILTER_STORAGE_KEY = "rayxu-active-filter-v1";
 const getPagePath = () => window.location.pathname.replace(/\/+$/, "") || "/";
 
 function getInitialFilter(): FilterName {
-  if (["/keyboard", "/projects"].includes(getPagePath())) return "Projects";
+  if (["/keyboard", "/aircad", "/projects"].includes(getPagePath())) return "Projects";
   try {
     const savedFilter = sessionStorage.getItem(ACTIVE_FILTER_STORAGE_KEY);
     return FILTERS.find((filter) => filter === savedFilter) ?? "All";
@@ -32,6 +33,7 @@ function getInitialFilter(): FilterName {
 
 export function App() {
   const [keyboardIntro, setKeyboardIntro] = useState(() => getPagePath() === "/keyboard");
+  const [aircadIntro, setAircadIntro] = useState(() => getPagePath() === "/aircad");
   const [activeFilter, setActiveFilter] = useState<FilterName>(getInitialFilter);
   const [searchRequest, setSearchRequest] = useState(() => ({
     query: getFilterQuery(activeFilter),
@@ -52,6 +54,15 @@ export function App() {
     window.history.replaceState(null, "", "/projects");
     setKeyboardIntro(false);
     setFloatDismissed(true);
+  }, []);
+
+  const finishAircadIntro = useCallback(() => {
+    window.history.replaceState(null, "", "/projects");
+    setAircadIntro(false);
+    setFloatDismissed(true);
+    requestAnimationFrame(() => {
+      document.querySelector<HTMLElement>('[data-filter-tab][aria-selected="true"]')?.focus({ preventScroll: true });
+    });
   }, []);
 
   const exitTour = useCallback((restoreFocus = true) => {
@@ -242,7 +253,8 @@ export function App() {
       </div>
       {tourStop !== null ? <GuidedTour stopIndex={tourStop} paused={tourPaused} onPauseChange={changeTourPause} onNavigate={navigateTour} onExit={exitTour} onComplete={completeTour} onSearchPreview={setTourSearch} /> : null}
       {keyboardIntro ? <KeyboardVideoIntro onComplete={finishKeyboardIntro} /> : null}
-      <TourFloatingCTA visible={!keyboardIntro && !tourCompleted && tourStop === null && !floatDismissed && !heroCtaVisible && activeFilter !== "Contact"} onStart={startTour} onDismiss={dismissFloat} />
+      {aircadIntro ? <AirCADVideoIntro onComplete={finishAircadIntro} /> : null}
+      <TourFloatingCTA visible={!keyboardIntro && !aircadIntro && !tourCompleted && tourStop === null && !floatDismissed && !heroCtaVisible && activeFilter !== "Contact"} onStart={startTour} onDismiss={dismissFloat} />
     </section>
   );
 }

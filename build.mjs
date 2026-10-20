@@ -6,7 +6,7 @@ const dist = resolve(root, "dist");
 const server = resolve(dist, "server");
 
 // GitHub Pages needs an actual entry document for direct route visits.
-for (const route of ["keyboard", "projects"]) {
+for (const route of ["keyboard", "aircad", "projects"]) {
   const directory = resolve(dist, "client", route);
   await mkdir(directory, { recursive: true });
   await copyFile(resolve(dist, "client", "index.html"), resolve(directory, "index.html"));

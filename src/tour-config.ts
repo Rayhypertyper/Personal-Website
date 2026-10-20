@@ -16,3 +16,14 @@ export const TOUR_COUNTDOWN_START_SECONDS = 30.9999;
 /** Reveal longer copy quickly enough for visitors to read ahead of the animation. */
 export const TOUR_READING_CHARACTERS_PER_SECOND = 60;
 export const TOUR_FLOAT_DISMISSED_KEY = "rayxu-tour-float-dismissed-v1";
+
+/** Shared by the guided tour and the /aircad video entrance. */
+export const AIRCAD_DEMO = {
+  stopId: "aircad",
+  title: "AirCAD",
+  src: "/aircad-demo.mp4",
+  poster: "/aircad-demo-poster.jpg",
+  start: 30.8,
+  end: 36,
+  playbackRate: 1.65,
+} as const;

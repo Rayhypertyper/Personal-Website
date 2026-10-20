@@ -8,7 +8,7 @@ import { useStepTimer } from "../hooks/useStepTimer";
 import { buildTypingSchedule, TOUR_CHARACTERS_PER_SECOND, useTourTypewriter } from "../hooks/useTourTypewriterOverhaul";
 import { TourSpotlight, type SpotlightRect, type PlanetSpotlight, type PlanetFinaleClock } from "./TourSpotlight";
 import { TourProgress } from "./TourProgress";
-import { TOUR_PLANET_FINALE_ENABLED } from "../tour-config";
+import { AIRCAD_DEMO, TOUR_PLANET_FINALE_ENABLED } from "../tour-config";
 import type { TourCount } from "./TourPageText";
 import "../guided-tour-overhaul.css";
 
@@ -49,8 +49,8 @@ export const TOUR_STOPS = [
     estimatedMs: 7800,
     filter: "Projects",
     title: "AirCAD",
-    videoStart: 30.8,
-    videoEnd: 36,
+    videoStart: AIRCAD_DEMO.start,
+    videoEnd: AIRCAD_DEMO.end,
     videoTitle: "AirCAD",
     durationSeconds: 3,
     readingPauseMs: 350,

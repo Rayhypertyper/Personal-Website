@@ -22,6 +22,9 @@
     if (location.pathname.replace(/\/+$/, "") === "/keyboard") {
       document.documentElement.dataset.keyboardIntro = "true";
     }
+    if (location.pathname.replace(/\/+$/, "") === "/aircad") {
+      document.documentElement.dataset.aircadIntro = "true";
+    }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -29,6 +32,8 @@
   <style>
     html[data-keyboard-intro="true"] body { background: #090a0c; }
     html[data-keyboard-intro="true"] .browser-frame { visibility: hidden; }
+    html[data-aircad-intro="true"] body { background: #090a0c; }
+    html[data-aircad-intro="true"] .browser-frame { visibility: hidden; }
 
     /* The dock is static HTML, but its full styling arrives with the app bundle. */
     .social-dock {
@@ -39,8 +44,8 @@
       visibility: visible;
     }
   </style>
-  <script type="module" crossorigin src="/assets/index-DomjNfG2.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-CtAyBQDQ.css">
+  <script type="module" crossorigin src="/assets/index-Be5J7SOy.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CnMrSVSh.css">
 </head>
 <body>
   <main>
