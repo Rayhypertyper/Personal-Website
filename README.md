@@ -126,7 +126,7 @@ Projects page at `/projects` and stops. Escape skips the clip; reduced motion
 returns directly without the zoom. Both routes have static entry documents for
 direct visits and refreshes on GitHub Pages.
 
-`/aircad` opens the same AirCAD clip as the tour (0:30.8–0:36) at normal speed with audio on,
+`/aircad` opens the AirCAD demo from 0:30.8–0:40 at normal speed with audio on,
 then zooms into its video card on `/projects` and stops. It has its own static
 entry document, supports Escape, and skips the zoom for reduced motion.
 Playback starts without a button prompt. If the browser blocks autoplay with sound,

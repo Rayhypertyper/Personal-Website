@@ -5,7 +5,7 @@ import { TourDemo } from "./TourDemoOverhaul";
 import "../aircad-video-intro.css";
 
 const ignore = () => {};
-const AIRCAD_INTRO = { ...AIRCAD_DEMO, playbackRate: 1 };
+const AIRCAD_INTRO = { ...AIRCAD_DEMO, end: 40, playbackRate: 1 };
 
 export function AirCADVideoIntro({ onComplete }: { onComplete: () => void }) {
   const stageRef = useRef<HTMLDivElement>(null);
