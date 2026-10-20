@@ -53,14 +53,20 @@ export function AirCADVideoIntro({ onComplete }: { onComplete: () => void }) {
   }, [finish]);
 
   return createPortal(
-    <TourDemo source={AIRCAD_INTRO} presentation="standalone" active paused={paused} hidden={hidden}
+    <TourDemo source={AIRCAD_INTRO} presentation="standalone" muted={false} active paused={paused} hidden={hidden}
       reducedMotion={reducedMotion} stageRef={stageRef} finishingRef={finishingRef}
       onPauseChange={setPaused} onFullscreenChange={ignore}
       onEntered={() => { delete document.documentElement.dataset.aircadIntro; }}
       onPlaybackBlocked={() => setPaused(true)} onBeforeExit={prepareProjects} onAdvance={finish}>
       {paused && !hidden ? (
         <div className="aircad-video-intro__recovery">
-          <button type="button" onClick={() => setPaused(false)}>Play AirCAD demo</button>
+          <button type="button" onClick={() => {
+            const video = stageRef.current?.querySelector("video");
+            if (!video) return;
+            video.muted = false;
+            setPaused(false);
+            void video.play().catch(() => setPaused(true));
+          }}>Play AirCAD demo</button>
           <button type="button" onClick={finish}>View projects</button>
         </div>
       ) : null}

@@ -26,10 +26,11 @@ interface TourDemoProps {
   onBeforeExit?: () => void;
   onAdvance: () => void;
   presentation?: "tour" | "standalone";
+  muted?: boolean;
   children?: ReactNode;
 }
 
-export function TourDemo({ source, active, paused, hidden, reducedMotion, stageRef, finishingRef, onPauseChange, onFullscreenChange, onPlaybackBlocked, onEntered, onBeforeExit, onAdvance, presentation = "tour", children }: TourDemoProps) {
+export function TourDemo({ source, active, paused, hidden, reducedMotion, stageRef, finishingRef, onPauseChange, onFullscreenChange, onPlaybackBlocked, onEntered, onBeforeExit, onAdvance, presentation = "tour", muted = true, children }: TourDemoProps) {
   const standalone = presentation === "standalone";
   const entranceTimingScale = source.stopId === "keyboard" ? 0.5 : 1;
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -268,7 +269,7 @@ export function TourDemo({ source, active, paused, hidden, reducedMotion, stageR
       data-tour-video data-poster-hidden={posterHidden} data-tour-video-active={active} data-demo-phase={phase} data-fullscreen-mode="viewport"
       aria-hidden={!active} inert={!active || hidden} role="region" aria-label={`${source.title} ${standalone ? "demo" : "tour demo"}`} ref={stageRef}>
       <video ref={videoRef} className="guided-tour-video__player" src={source.src} poster={source.poster}
-        aria-label={`${source.title} ${standalone ? "video" : "tour video"}`} controls={controlsEnabled} muted playsInline preload="auto"
+        aria-label={`${source.title} ${standalone ? "video" : "tour video"}`} controls={controlsEnabled} muted={muted} playsInline preload="auto"
         controlsList={standalone ? "nofullscreen noremoteplayback" : undefined} disablePictureInPicture={standalone}
         tabIndex={controlsEnabled ? undefined : 0}
         onFocus={revealControls}
