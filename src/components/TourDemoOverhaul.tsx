@@ -22,10 +22,12 @@ interface TourDemoProps {
   onPlaybackBlocked: () => void;
   onEntered: () => void;
   onAdvance: () => void;
-  children: ReactNode;
+  presentation?: "tour" | "standalone";
+  children?: ReactNode;
 }
 
-export function TourDemo({ source, active, paused, hidden, reducedMotion, stageRef, finishingRef, onPauseChange, onFullscreenChange, onPlaybackBlocked, onEntered, onAdvance, children }: TourDemoProps) {
+export function TourDemo({ source, active, paused, hidden, reducedMotion, stageRef, finishingRef, onPauseChange, onFullscreenChange, onPlaybackBlocked, onEntered, onAdvance, presentation = "tour", children }: TourDemoProps) {
+  const standalone = presentation === "standalone";
   const entranceTimingScale = source.stopId === "keyboard" ? 0.5 : 1;
   const videoRef = useRef<HTMLVideoElement>(null);
   const posterRef = useRef<HTMLImageElement>(null);
@@ -71,7 +73,7 @@ export function TourDemo({ source, active, paused, hidden, reducedMotion, stageR
 
   const play = () => {
     const state = playbackStateRef.current;
-    if (!readyRef.current || !enteredRef.current || doneRef.current || !state.active || state.paused || state.hidden) return;
+    if (!readyRef.current || !enteredRef.current || videoRef.current?.seeking || doneRef.current || !state.active || state.paused || state.hidden) return;
     void videoRef.current?.play().catch(() => {
       const current = playbackStateRef.current;
       if (mountedRef.current && current.active && !current.paused && !current.hidden && !doneRef.current) actionsRef.current.onPlaybackBlocked();
@@ -114,7 +116,7 @@ export function TourDemo({ source, active, paused, hidden, reducedMotion, stageR
     const progress = progressRef.current;
     if (!video) return;
     const prepare = () => {
-      video.defaultPlaybackRate = source.stopId === "aircad" ? 1.65 : source.stopId === "keyboard" ? 1.5 : 1;
+      video.defaultPlaybackRate = standalone ? 1 : source.stopId === "aircad" ? 1.65 : source.stopId === "keyboard" ? 1.5 : 1;
       video.playbackRate = video.defaultPlaybackRate;
       video.currentTime = Math.min(source.start, Math.max(0, video.duration - 0.1));
       readyRef.current = true;
@@ -171,6 +173,15 @@ export function TourDemo({ source, active, paused, hidden, reducedMotion, stageR
     if (failedRef.current) { finishDemo(); return; }
     if (activatedRef.current) { expansion(); play(); return; }
     activatedRef.current = true;
+    if (standalone) {
+      expansion();
+      enteredRef.current = true;
+      setPhase("entered");
+      setPosterHidden(true);
+      actionsRef.current.onEntered();
+      play();
+      return;
+    }
     setPhase("expanding");
     stage.style.willChange = "transform, clip-path";
     const animation = stage.animate(expansion(), { duration: (reducedMotion ? 120 : 520) * entranceTimingScale, easing: "cubic-bezier(0.16,1,0.3,1)", fill: "both" });
@@ -187,6 +198,19 @@ export function TourDemo({ source, active, paused, hidden, reducedMotion, stageR
       return fade?.finished.then(() => { if (mountedRef.current) { setPosterHidden(true); play(); } }).catch(() => {});
     }).catch(() => {});
   }, [active, paused, hidden, reducedMotion]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    const end = source.end;
+    if (!standalone || !active || paused || hidden || !video || typeof end !== "number" || !video.requestVideoFrameCallback) return;
+    let frameId: number;
+    const checkEnd = (_now: number, frame: VideoFrameCallbackMetadata) => {
+      if (frame.mediaTime >= end) finishDemo();
+      else frameId = video.requestVideoFrameCallback(checkEnd);
+    };
+    frameId = video.requestVideoFrameCallback(checkEnd);
+    return () => video.cancelVideoFrameCallback(frameId);
+  }, [standalone, active, paused, hidden, source.end]);
 
   useEffect(() => {
     const resize = () => {
@@ -234,13 +258,14 @@ export function TourDemo({ source, active, paused, hidden, reducedMotion, stageR
     }).catch(() => {});
   };
 
-  const hasCaption = source.stopId === "keyboard";
+  const hasCaption = !standalone && source.stopId === "keyboard";
   return (
-    <div className={`guided-tour-video${active ? "" : " guided-tour-video--preparing"}${hasCaption ? " guided-tour-video--captioned" : ""}`}
+    <div className={`guided-tour-video${active ? "" : " guided-tour-video--preparing"}${hasCaption ? " guided-tour-video--captioned" : ""}${standalone ? " guided-tour-video--standalone" : ""}`}
       data-tour-video data-poster-hidden={posterHidden} data-tour-video-active={active} data-demo-phase={phase} data-fullscreen-mode="viewport"
-      aria-hidden={!active} inert={!active || hidden} role="region" aria-label={`${source.title} tour demo`} ref={stageRef}>
+      aria-hidden={!active} inert={!active || hidden} role="region" aria-label={`${source.title} ${standalone ? "demo" : "tour demo"}`} ref={stageRef}>
       <video ref={videoRef} className="guided-tour-video__player" src={source.src} poster={source.poster}
-        aria-label={`${source.title} tour video`} controls={controlsEnabled} muted playsInline preload="auto"
+        aria-label={`${source.title} ${standalone ? "video" : "tour video"}`} controls={controlsEnabled} muted playsInline preload="auto"
+        controlsList={standalone ? "nofullscreen noremoteplayback" : undefined} disablePictureInPicture={standalone}
         tabIndex={controlsEnabled ? undefined : 0}
         onFocus={revealControls}
         onClick={revealControls}
@@ -262,7 +287,7 @@ export function TourDemo({ source, active, paused, hidden, reducedMotion, stageR
         }}
         onPlay={() => { suppressPauseRef.current = false; syncProgress(true); if (active && paused && !hidden) onPauseChange(false); }} />
       <img ref={posterRef} className="guided-tour-video__poster" src={source.poster} alt="" aria-hidden="true" />
-      <i ref={progressRef} className="guided-tour-video__progress" aria-hidden="true" />
+      {!standalone ? <i ref={progressRef} className="guided-tour-video__progress" aria-hidden="true" /> : null}
       {hasCaption ? <p className="guided-tour-video__caption">Invisible Keyboard <span>demo</span></p> : null}
       {children}
     </div>

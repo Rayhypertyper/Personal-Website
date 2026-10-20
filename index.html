@@ -19,11 +19,17 @@
       history.scrollRestoration = "manual";
     }
     window.scrollTo(0, 0);
+    if (location.pathname.replace(/\/+$/, "") === "/keyboard") {
+      document.documentElement.dataset.keyboardIntro = "true";
+    }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Quicksand:wght@500;600&family=Roboto:wght@300;400;600&display=swap" rel="stylesheet" />
   <style>
+    html[data-keyboard-intro="true"] body { background: #090a0c; }
+    html[data-keyboard-intro="true"] .browser-frame { visibility: hidden; }
+
     /* The dock is static HTML, but its full styling arrives with the app bundle. */
     .social-dock {
       visibility: hidden;

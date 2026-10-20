@@ -1,9 +1,16 @@
-import { mkdir, rm, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, rm, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 const root = process.cwd();
 const dist = resolve(root, "dist");
 const server = resolve(dist, "server");
+
+// GitHub Pages needs an actual entry document for direct route visits.
+for (const route of ["keyboard", "projects"]) {
+  const directory = resolve(dist, "client", route);
+  await mkdir(directory, { recursive: true });
+  await copyFile(resolve(dist, "client", "index.html"), resolve(directory, "index.html"));
+}
 
 const worker = `
 const CONTACT_RECIPIENT = "your.email@example.com";

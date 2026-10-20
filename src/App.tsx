@@ -6,6 +6,7 @@ import { PersonalGlobe } from "./components/PersonalGlobe";
 import { AllOverview } from "./components/AllOverview";
 import { TourFloatingCTA } from "./components/TourFloatingCTA";
 import { ProjectsShowcase } from "./components/ProjectsShowcase";
+import { KeyboardVideoIntro } from "./components/KeyboardVideoIntro";
 import { ExperienceTimeline } from "./components/ExperienceTimeline";
 import { AboutSection } from "./components/AboutSection";
 import { ContactSection } from "./components/ContactSection";
@@ -17,8 +18,10 @@ import { TOUR_FLOAT_DISMISSED_KEY, TOUR_OVERHAUL_ENABLED } from "./tour-config";
 import "./globe.css";
 
 const ACTIVE_FILTER_STORAGE_KEY = "rayxu-active-filter-v1";
+const getPagePath = () => window.location.pathname.replace(/\/+$/, "") || "/";
 
 function getInitialFilter(): FilterName {
+  if (["/keyboard", "/projects"].includes(getPagePath())) return "Projects";
   try {
     const savedFilter = sessionStorage.getItem(ACTIVE_FILTER_STORAGE_KEY);
     return FILTERS.find((filter) => filter === savedFilter) ?? "All";
@@ -28,6 +31,7 @@ function getInitialFilter(): FilterName {
 }
 
 export function App() {
+  const [keyboardIntro, setKeyboardIntro] = useState(() => getPagePath() === "/keyboard");
   const [activeFilter, setActiveFilter] = useState<FilterName>(getInitialFilter);
   const [searchRequest, setSearchRequest] = useState(() => ({
     query: getFilterQuery(activeFilter),
@@ -43,6 +47,12 @@ export function App() {
   const [floatDismissed, setFloatDismissed] = useState(() => {
     try { return sessionStorage.getItem(TOUR_FLOAT_DISMISSED_KEY) === "true"; } catch { return false; }
   });
+
+  const finishKeyboardIntro = useCallback(() => {
+    window.history.replaceState(null, "", "/projects");
+    setKeyboardIntro(false);
+    setFloatDismissed(true);
+  }, []);
 
   const exitTour = useCallback((restoreFocus = true) => {
     setTourStop(null);
@@ -128,13 +138,16 @@ export function App() {
 
   useEffect(() => {
     // Keep the selected page when a preview reconnect or refresh reloads the app.
+    if (!keyboardIntro && getPagePath() === "/projects" && activeFilter !== "Projects") {
+      window.history.replaceState(null, "", "/");
+    }
     try { sessionStorage.setItem(ACTIVE_FILTER_STORAGE_KEY, activeFilter); } catch { /* Browsing also works without storage. */ }
     document.documentElement.dataset.contactPage =
       activeFilter === "Contact" ? "true" : "false";
     document.documentElement.dataset.projectsPage =
       activeFilter === "Projects" ? "true" : "false";
     document.querySelector(".browser-frame")?.scrollTo({ top: 0, behavior: "instant" });
-  }, [activeFilter]);
+  }, [activeFilter, keyboardIntro]);
 
   const resultCount =
     activeFilter === "All"
@@ -228,7 +241,8 @@ export function App() {
         </div>
       </div>
       {tourStop !== null ? <GuidedTour stopIndex={tourStop} paused={tourPaused} onPauseChange={changeTourPause} onNavigate={navigateTour} onExit={exitTour} onComplete={completeTour} onSearchPreview={setTourSearch} /> : null}
-      <TourFloatingCTA visible={!tourCompleted && tourStop === null && !floatDismissed && !heroCtaVisible && activeFilter !== "Contact"} onStart={startTour} onDismiss={dismissFloat} />
+      {keyboardIntro ? <KeyboardVideoIntro onComplete={finishKeyboardIntro} /> : null}
+      <TourFloatingCTA visible={!keyboardIntro && !tourCompleted && tourStop === null && !floatDismissed && !heroCtaVisible && activeFilter !== "Contact"} onStart={startTour} onDismiss={dismissFloat} />
     </section>
   );
 }
