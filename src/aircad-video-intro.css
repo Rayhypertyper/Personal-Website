@@ -3,35 +3,3 @@ html .guided-tour-video.guided-tour-video--standalone .guided-tour-video__player
   height: 100%;
 }
 
-.aircad-video-intro__recovery {
-  position: absolute;
-  z-index: 3;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding: 24px;
-  background: rgb(9 10 12 / 72%);
-}
-
-.aircad-video-intro__recovery button {
-  padding: 12px 20px;
-  border: 1px solid #c5b7a9;
-  border-radius: 12px;
-  background: #090a0c;
-  color: #f2e9df;
-  font: inherit;
-  cursor: pointer;
-}
-
-.aircad-video-intro__recovery button:is(:hover, :focus-visible) {
-  border-color: #f0ad88;
-  color: #f0ad88;
-}
-
-.aircad-video-intro__recovery button:focus-visible {
-  outline: 2px solid #f0ad88;
-  outline-offset: 4px;
-}
