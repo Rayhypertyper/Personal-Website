@@ -5,6 +5,7 @@ import { TourDemo } from "./TourDemoOverhaul";
 import "../aircad-video-intro.css";
 
 const ignore = () => {};
+const AIRCAD_INTRO = { ...AIRCAD_DEMO, playbackRate: 1 };
 
 export function AirCADVideoIntro({ onComplete }: { onComplete: () => void }) {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -52,7 +53,7 @@ export function AirCADVideoIntro({ onComplete }: { onComplete: () => void }) {
   }, [finish]);
 
   return createPortal(
-    <TourDemo source={AIRCAD_DEMO} presentation="standalone" active paused={paused} hidden={hidden}
+    <TourDemo source={AIRCAD_INTRO} presentation="standalone" active paused={paused} hidden={hidden}
       reducedMotion={reducedMotion} stageRef={stageRef} finishingRef={finishingRef}
       onPauseChange={setPaused} onFullscreenChange={ignore}
       onEntered={() => { delete document.documentElement.dataset.aircadIntro; }}
