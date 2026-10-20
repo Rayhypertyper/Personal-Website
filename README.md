@@ -129,8 +129,8 @@ direct visits and refreshes on GitHub Pages.
 `/aircad` opens the AirCAD demo from 0:30.8–0:40 at normal speed with audio on,
 then zooms into its video card on `/projects` and stops. It has its own static
 entry document, supports Escape, and skips the zoom for reduced motion.
-Playback starts without a button prompt. If the browser blocks autoplay with sound,
-it starts muted and enables sound on the first tap or key press.
+Playback attempts to start with sound, without a button prompt or muted fallback.
+If the browser blocks autoplay with sound, the first tap or key press starts it with audio.
 
 ```bash
 npm run typecheck

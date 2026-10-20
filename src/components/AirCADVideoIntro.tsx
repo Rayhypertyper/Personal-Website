@@ -10,8 +10,7 @@ const AIRCAD_INTRO = { ...AIRCAD_DEMO, end: 40, playbackRate: 1 };
 export function AirCADVideoIntro({ onComplete }: { onComplete: () => void }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const finishingRef = useRef(false);
-  const autoplayMutedRef = useRef(false);
-  const [muted, setMuted] = useState(false);
+  const awaitingGestureRef = useRef(true);
   const [paused, setPaused] = useState(false);
   const [hidden, setHidden] = useState(() => document.hidden);
   const [reducedMotion, setReducedMotion] = useState(() => matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -33,15 +32,8 @@ export function AirCADVideoIntro({ onComplete }: { onComplete: () => void }) {
     onComplete();
   }, [onComplete, prepareProjects]);
 
-  const playMuted = useCallback(() => {
-    const video = stageRef.current?.querySelector("video");
-    if (!video || finishingRef.current || document.hidden) return;
-    autoplayMutedRef.current = true;
-    video.muted = true;
-    setMuted(true);
-    void video.play().catch(() => {
-      // A tap on the video can still start playback under stricter browser policies.
-    });
+  const awaitPlaybackGesture = useCallback(() => {
+    awaitingGestureRef.current = true;
   }, []);
 
   useEffect(() => {
@@ -51,13 +43,15 @@ export function AirCADVideoIntro({ onComplete }: { onComplete: () => void }) {
     const updateMotion = () => setReducedMotion(motion.matches);
     const updateVisibility = () => setHidden(document.hidden);
     const enableSound = () => {
-      if (!autoplayMutedRef.current || finishingRef.current) return;
+      if (!awaitingGestureRef.current || finishingRef.current) return;
       const video = stageRef.current?.querySelector("video");
       if (!video) return;
-      autoplayMutedRef.current = false;
+      if (!video.paused) { awaitingGestureRef.current = false; return; }
       video.muted = false;
-      setMuted(false);
-      void video.play().catch(playMuted);
+      setPaused(false);
+      void video.play().then(() => {
+        awaitingGestureRef.current = false;
+      }).catch(awaitPlaybackGesture);
     };
     const skip = (event: KeyboardEvent) => {
       if (event.key === "Escape") finish();
@@ -75,14 +69,14 @@ export function AirCADVideoIntro({ onComplete }: { onComplete: () => void }) {
       document.removeEventListener("keydown", skip);
       document.removeEventListener("pointerdown", enableSound, true);
     };
-  }, [finish, playMuted]);
+  }, [finish, awaitPlaybackGesture]);
 
   return createPortal(
-    <TourDemo source={AIRCAD_INTRO} presentation="standalone" muted={muted} active paused={paused} hidden={hidden}
+    <TourDemo source={AIRCAD_INTRO} presentation="standalone" muted={false} active paused={paused} hidden={hidden}
       reducedMotion={reducedMotion} stageRef={stageRef} finishingRef={finishingRef}
       onPauseChange={setPaused} onFullscreenChange={ignore}
       onEntered={() => { delete document.documentElement.dataset.aircadIntro; }}
-      onPlaybackBlocked={playMuted} onBeforeExit={prepareProjects} onAdvance={finish} />,
+      onPlaybackBlocked={awaitPlaybackGesture} onBeforeExit={prepareProjects} onAdvance={finish} />,
     document.body,
   );
 }
