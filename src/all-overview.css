@@ -87,10 +87,9 @@ main:has(.all-search-panel),
 .all-overview__name {
   margin: 0 0 10px;
   color: var(--all-ink);
-  font-family: "bookman-jf-pro", "Bookman JF Pro", "TeX Gyre Bonum", "Bookman Old Style", Georgia, serif;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
   font-size: clamp(58px, 5.6vw, 82px);
-  font-style: italic;
-  font-weight: 400;
+  font-weight: 800;
   line-height: 1.12;
   letter-spacing: -0.025em;
 }

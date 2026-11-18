@@ -34,12 +34,6 @@ export function KeyboardVideoIntro({ onComplete }: { onComplete: () => void }) {
     document.addEventListener("keydown", onKeyDown);
     motion.addEventListener("change", onMotionChange);
 
-    // The card receives the last frame before the fullscreen player shrinks into it.
-    const cardVideo = document.querySelector<HTMLVideoElement>('[data-tour-target="keyboard"] video');
-    const prepareCard = () => { if (cardVideo) cardVideo.currentTime = KEYBOARD_CLIP.end!; };
-    if (cardVideo && cardVideo.readyState >= 1) prepareCard();
-    else cardVideo?.addEventListener("loadedmetadata", prepareCard, { once: true });
-
     return () => {
       if (page) page.inert = false;
       delete document.documentElement.dataset.keyboardIntro;
@@ -49,7 +43,6 @@ export function KeyboardVideoIntro({ onComplete }: { onComplete: () => void }) {
       document.removeEventListener("visibilitychange", onVisibilityChange);
       document.removeEventListener("keydown", onKeyDown);
       motion.removeEventListener("change", onMotionChange);
-      cardVideo?.removeEventListener("loadedmetadata", prepareCard);
     };
   }, [onComplete]);
 

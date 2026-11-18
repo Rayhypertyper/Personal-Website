@@ -7,6 +7,38 @@
   animation: projects-demo-open 640ms var(--projects-entrance-ease) both;
 }
 
+.projects-feature__preview-toggle {
+  position: absolute;
+  inset-inline-end: 8px;
+  inset-block-end: 8px;
+  display: grid;
+  place-items: center;
+  min-inline-size: 36px;
+  min-block-size: 36px;
+  border: 1px solid rgb(255 255 255 / 45%);
+  border-radius: 50%;
+  background: #111c27;
+  color: #fff;
+  cursor: pointer;
+}
+
+.projects-feature__preview-toggle:hover,
+.projects-feature__preview-toggle:focus-visible {
+  background: #263044;
+}
+
+.projects-feature__preview-toggle:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .projects-feature__preview-toggle {
+    min-inline-size: 44px;
+    min-block-size: 44px;
+  }
+}
+
 .projects-showcase .projects-feature__copy,
 .projects-showcase .projects-feature__metrics,
 .projects-showcase .projects-list__item {

@@ -1,0 +1,29 @@
+[
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "page",
+  "shape": "Split Studio",
+  "theme": "Editorial",
+  "genre": "editorial",
+  "axes": "light/display-condensed/chromatic-green",
+  "hero": "Stage",
+  "nav": "edge-aligned",
+  "footer": "colophon block",
+  "imagery": "real project captures",
+  "photos": [],
+  "entry": "local editorial preview of the portfolio homepage",
+  "fingerprint": "Left-margin|Two-column asymmetric|Hairline|Solid|Tightly cropped to the grid|None",
+  "sections": [
+   "Stage",
+   "Index",
+   "Experience rows",
+   "Contact colophon"
+  ],
+  "signature": "Invisiboard tracking hands mid-keystroke",
+  "waived": [],
+  "prompt": "Show a preview of a redesigned landing page using Hallmark’s Editorial theme",
+  "draw": "037577",
+  "date": "2026-11-18"
+ }
+]

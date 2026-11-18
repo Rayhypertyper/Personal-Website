@@ -20,12 +20,6 @@ export function AirCADVideoIntro({ onComplete }: { onComplete: () => void }) {
     const media = document.querySelector<HTMLElement>('[data-tour-target="aircad"] .projects-feature__media');
     // Position the destination while it is covered, then use the tour's exit.
     media?.scrollIntoView({ block: "center", behavior: "instant" });
-    const cardVideo = media?.querySelector("video");
-    const introVideo = stageRef.current?.querySelector("video");
-    if (cardVideo && introVideo && cardVideo.readyState >= 1) {
-      cardVideo.pause();
-      cardVideo.currentTime = introVideo.currentTime;
-    }
   }, []);
 
   const finish = useCallback(() => {

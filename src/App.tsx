@@ -209,7 +209,7 @@ export function App() {
           } translate-y-0 opacity-100`}
         >
           {activeFilter === "Projects" ? (
-            <ProjectsShowcase />
+            <ProjectsShowcase previewsSuspended={keyboardIntro || aircadIntro || (tourStop !== null && !tourPaused)} />
           ) : activeFilter === "All" ? (
             <AllOverview
               onProjectsClick={() => changeFilter("Projects")}

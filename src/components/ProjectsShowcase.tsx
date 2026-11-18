@@ -6,12 +6,13 @@ import {
   Settings,
   Trophy,
 } from "lucide-react";
-import { useRef, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { TourPageText } from "./TourPageText";
 import { TOUR_READING_CHARACTERS_PER_SECOND } from "../tour-config";
 import { PaperPlaneDoodle } from "./PaperPlaneDoodle";
 import { AirCADDoodles } from "./AirCADDoodles";
 import { KeyboardDoodles } from "./KeyboardDoodles";
+import { ProjectDemoLoop } from "./ProjectDemoLoop";
 import "../projects-motion.css";
 import "../aircad-project.css";
 import "../keyboard-project.css";
@@ -27,32 +28,7 @@ function TechChip({ kind, icon, children }: { kind?: string; icon?: ReactNode; c
   );
 }
 
-export function ProjectsShowcase() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const aircadVideoRef = useRef<HTMLVideoElement>(null);
-
-  const playProjectFullscreen = (video: HTMLVideoElement | null) => {
-    if (!video) {
-      return;
-    }
-
-    void video.play().catch(() => {
-      // The browser may block playback if the click is no longer considered user initiated.
-    });
-
-    if (video.requestFullscreen) {
-      void video.requestFullscreen().catch(() => {
-        // Playback still starts when fullscreen is unavailable or denied.
-      });
-      return;
-    }
-
-    const legacyVideo = video as HTMLVideoElement & {
-      webkitEnterFullscreen?: () => void;
-    };
-    legacyVideo.webkitEnterFullscreen?.();
-  };
-
+export function ProjectsShowcase({ previewsSuspended }: { previewsSuspended: boolean }) {
   return (
     <section className="projects-showcase" aria-label="Featured projects">
       <article className="projects-feature projects-feature--keyboard" data-tour-target="keyboard">
@@ -77,15 +53,14 @@ export function ProjectsShowcase() {
             <TechChip kind="mediapipe">MediaPipe</TechChip>
           </div>
           <div className="projects-feature__actions">
-            <button
-              type="button"
+            <a
+              href="/keyboard/"
               className="projects-feature__button"
-              onClick={() => playProjectFullscreen(videoRef.current)}
-              aria-label="Play Invisiboard project demo in fullscreen"
+              aria-label="View Project: Invisiboard"
             >
               <span className="projects-green-arrow" aria-hidden="true" />
-              View Project <ArrowRight size={16} />
-            </button>
+              View Project <ArrowRight size={16} aria-hidden="true" />
+            </a>
             <a
               href="https://github.com/Rayhypertyper/Invisible-Keyboard"
               target="_blank"
@@ -102,20 +77,14 @@ export function ProjectsShowcase() {
 
         <div className="projects-feature__media-frame">
           <KeyboardDoodles />
-          <div className="projects-feature__media">
-            <video
-              ref={videoRef}
-              className="projects-feature__video"
-              controls
-              playsInline
-              preload="metadata"
-              poster="/invisible-keyboard-demo-poster.jpg"
-              aria-label="Invisiboard project demo"
-            >
-              <source src="/invisible-keyboard-demo.mp4" type="video/mp4" />
-              Your browser does not support embedded video.
-            </video>
-          </div>
+          <ProjectDemoLoop
+            title="Invisiboard"
+            src="/invisible-keyboard-preview.mp4"
+            poster="/invisible-keyboard-intro-poster.jpg"
+            width={1280}
+            height={832}
+            suspended={previewsSuspended}
+          />
         </div>
 
         <div className="projects-feature__metrics" aria-label="Project metrics" data-tour-metrics>
@@ -176,14 +145,13 @@ export function ProjectsShowcase() {
             <TechChip icon={<Box size={22} strokeWidth={1.7} aria-hidden="true" />}>FreeCAD</TechChip>
           </div>
           <div className="projects-feature__actions">
-            <button
-              type="button"
+            <a
+              href="/aircad/"
               className="projects-feature__button"
-              onClick={() => playProjectFullscreen(aircadVideoRef.current)}
-              aria-label="Play AirCAD project demo in fullscreen"
+              aria-label="View Project: AirCAD"
             >
               View Project <ArrowRight size={16} aria-hidden="true" />
-            </button>
+            </a>
             <a
               href="https://devpost.com/software/aircad"
               target="_blank"
@@ -199,24 +167,15 @@ export function ProjectsShowcase() {
         </div>
 
         <div className="projects-feature__media-frame">
-          <div className="projects-feature__media">
-            <video
-              ref={aircadVideoRef}
-              className="projects-feature__video"
-              onLoadedMetadata={(event) => {
-                event.currentTarget.defaultPlaybackRate = 1.65;
-                event.currentTarget.playbackRate = 1.65;
-              }}
-              controls
-              playsInline
-              preload="metadata"
-              poster="/aircad-demo-poster.jpg"
-              aria-label="AirCAD project demo"
-            >
-              <source src="/aircad-demo.mp4" type="video/mp4" />
-              Your browser does not support embedded video. <a href="/aircad-demo.mp4">Watch the AirCAD demo.</a>
-            </video>
-          </div>
+          <ProjectDemoLoop
+            title="AirCAD"
+            src="/aircad-preview.mp4"
+            poster="/aircad-demo-poster.jpg"
+            width={1280}
+            height={720}
+            lazy
+            suspended={previewsSuspended}
+          />
         </div>
       </article>
     </section>
