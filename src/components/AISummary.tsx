@@ -1,4 +1,4 @@
-import { BrainCircuit, Code2, ScanEye, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { TourPageText } from "./TourPageText";
 import { TOUR_READING_CHARACTERS_PER_SECOND } from "../tour-config";
 
@@ -17,12 +17,6 @@ const OVERVIEW_TOKENS: readonly OverviewToken[] = [
   { text: "machine learning systems", strong: true },
   { text: ".", strong: false },
 ];
-
-const skills = [
-  { label: "Python", icon: Code2, kind: "python" },
-  { label: "Computer Vision", icon: ScanEye, kind: "computer-vision" },
-  { label: "Machine Learning", icon: BrainCircuit, kind: "machine-learning" },
-] as const;
 
 export function AISummary() {
   return (
@@ -43,20 +37,6 @@ export function AISummary() {
         )}
         </TourPageText>
       </p>
-
-      <div className="ai-overview__skills" aria-label="Areas of focus">
-        {skills.map((skill) => (
-          <span className="ai-overview__skill" key={skill.kind}>
-            <skill.icon
-              className="ai-overview__skill-icon"
-              size={19}
-              strokeWidth={1.65}
-              aria-hidden="true"
-            />
-            <span>{skill.label}</span>
-          </span>
-        ))}
-      </div>
     </section>
   );
 }

@@ -5194,103 +5194,6 @@ html[data-contact-page="true"] .social-dock {
   white-space: nowrap;
 }
 
-.ai-overview__skills {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  margin-top: 20px;
-}
-
-.ai-overview__skills--revealing {
-  animation: overview-skills-reveal 900ms cubic-bezier(0.22, 1, 0.36, 1)
-    both;
-}
-
-.ai-overview__skills--revealing .ai-overview__skill {
-  animation: overview-skill-reveal 700ms cubic-bezier(0.22, 1, 0.36, 1)
-    both;
-}
-
-.ai-overview__skills--revealing .ai-overview__skill:nth-child(2) {
-  animation-delay: 100ms;
-}
-
-.ai-overview__skills--revealing .ai-overview__skill:nth-child(3) {
-  animation-delay: 200ms;
-}
-
-@keyframes overview-skills-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes overview-skill-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(5px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.ai-overview__skill {
-  height: 38px;
-  padding: 0 13px 0 11px;
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  flex: 0 0 auto;
-  border: 1px solid rgba(232, 217, 208, 0.95);
-  border-radius: 10px;
-  color: var(--overview-ink);
-  background: rgba(255, 255, 255, 0.84);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    0 3px 8px rgba(99, 66, 50, 0.08);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
-  font-size: 14.3px;
-  font-weight: 500;
-  letter-spacing: -0.015em;
-  white-space: nowrap;
-}
-
-.ai-overview__skill-icon {
-  width: 21px;
-  height: 21px;
-  flex: 0 0 auto;
-  color: var(--overview-accent);
-}
-
-.ai-overview__skill-icon--python {
-  width: 22px;
-  height: 22px;
-  object-fit: contain;
-}
-
-.ai-overview__skill-icon--machine-learning {
-  width: 25.41px;
-  height: 25.41px;
-  object-fit: contain;
-  object-position: center;
-}
-
-.ai-overview__skill-icon--computer-vision {
-  width: 23.1px;
-  height: 23.1px;
-  object-fit: contain;
-  object-position: center;
-}
-
 .ai-overview__glow {
   position: absolute;
   z-index: 0;
@@ -5482,20 +5385,6 @@ html[data-contact-page="true"] .social-dock {
     margin-top: 15px;
     font-size: 13.2px;
     line-height: 21px;
-  }
-
-  .ai-overview__skills {
-    gap: 18px;
-    margin-top: 17px;
-    margin-right: -15px;
-    margin-left: -15px;
-    overflow-x: auto;
-    padding-bottom: 2px;
-    scrollbar-width: none;
-  }
-
-  .ai-overview__skills::-webkit-scrollbar {
-    display: none;
   }
 
   .ai-overview__desktop-break {
@@ -5735,13 +5624,6 @@ html[data-theme="dark"] .ai-overview {
   box-shadow:
     inset 0 1px 0 rgba(214, 234, 255, 0.08),
     0 12px 28px rgba(0, 0, 0, 0.2);
-}
-
-html[data-theme="dark"] .ai-overview__skill {
-  border-color: rgba(143, 184, 240, 0.2);
-  color: #d9e8ff;
-  background: rgba(20, 42, 76, 0.82);
-  box-shadow: inset 0 1px 0 rgba(223, 239, 255, 0.08), 0 5px 14px rgba(0, 0, 0, 0.2);
 }
 
 html[data-theme="dark"] .about-section {
@@ -6270,18 +6152,6 @@ main {
   line-height: clamp(21px, 1.6vw, 25px);
 }
 
-.ai-overview__skills {
-  min-width: 0;
-  flex-wrap: wrap;
-  gap: clamp(12px, 1.3vw, 18px);
-}
-
-.ai-overview__skill {
-  max-width: 100%;
-  white-space: normal;
-  font-size: clamp(13px, 0.95vw, 14.3px);
-}
-
 .about-section,
 .about-section__intro,
 .about-section__details,
@@ -6417,13 +6287,6 @@ main {
 
   .ai-overview {
     min-height: 190px;
-  }
-}
-
-@media (max-width: 639px) {
-  .ai-overview__skills {
-    margin-inline: 0;
-    overflow: visible;
   }
 }
 
@@ -6591,10 +6454,6 @@ main {
   .ai-overview__copy {
     font-size: clamp(12px, 3.4vw, 13px);
     line-height: 1.55;
-  }
-
-  .ai-overview__skill {
-    font-size: clamp(11px, 3vw, 12px);
   }
 
   .about-section {

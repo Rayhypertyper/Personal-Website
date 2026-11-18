@@ -19,7 +19,7 @@
 /* All-tab redesign: native CSS, with the portfolio's existing warm accent.
    DESIGN_VARIANCE: 6 / MOTION_INTENSITY: 4 / VISUAL_DENSITY: 3.
    The name and biography lead; the real project preview supports them.
-   Shape scale: 20px for media, 16px for the featured result, pills for skills.
+   Shape scale: 20px for media and 16px for the featured result.
    Motion introduces the content hierarchy and acknowledges interactive targets. */
 
 .search-panel.all-search-panel {
@@ -158,34 +158,6 @@ main:has(.all-search-panel),
 .all-overview .ai-overview__copy strong {
   color: var(--all-ink);
   font-weight: 600;
-}
-
-.all-overview .ai-overview__skills {
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 27px;
-}
-
-.all-search-panel .all-overview .ai-overview__skill {
-  height: 38px;
-  gap: 8px;
-  padding: 0 12px;
-  border: 1px solid var(--all-line);
-  border-radius: 999px;
-  color: var(--all-ink);
-  background: var(--all-card);
-  box-shadow: none;
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.all-overview .ai-overview__skill-icon {
-  width: 19px;
-  height: 19px;
-  object-fit: contain;
-  color: var(--all-accent);
 }
 
 .all-project {
@@ -519,16 +491,6 @@ html[data-theme="dark"] .search-panel.all-search-panel {
     line-height: 1.65;
   }
 
-  .all-overview .ai-overview__skills {
-    margin-top: 22px;
-    gap: 7px;
-  }
-
-  .all-overview .ai-overview__skill {
-    padding-inline: 10px;
-    font-size: 11px;
-  }
-
   .all-project {
     max-width: none;
   }
@@ -640,28 +602,8 @@ html[data-theme="dark"] .all-search-panel .result-card--aircad > span:last-child
   box-shadow: none !important;
 }
 
-/* Fit the complete All composition inside laptop and desktop viewports.
-   Each vertical interval scales from the same viewport-height range so the
-   relationship between the search, overview, project, education, and dock
-   stays intact as the available height changes. */
+/* Fill the viewport when content fits and let the page grow on short screens. */
 @media (min-width: 768px) {
-  html:has(.all-search-panel),
-  body:has(.all-search-panel),
-  main:has(.all-search-panel),
-  .browser-frame:has(.all-search-panel),
-  .browser-frame:has(.all-search-panel) .hero-content,
-  .browser-frame:has(.all-search-panel) #portfolioSearchRoot,
-  .search-panel.all-search-panel,
-  .all-search-panel .search-panel__inner {
-    height: 100dvh;
-    min-height: 0;
-    overflow: hidden;
-  }
-
-  .browser-frame:has(.all-search-panel) {
-    min-height: 0;
-  }
-
   .all-search-panel .search-panel__inner {
     display: flex;
     flex-direction: column;
@@ -670,26 +612,22 @@ html[data-theme="dark"] .all-search-panel .result-card--aircad > span:last-child
 
   .all-search-panel .search-results-stack.all-results {
     display: flex;
-    flex: 1 1 auto;
-    min-height: 0;
+    flex: 1 0 auto;
     margin-top: clamp(8px, 2.3svh, 22px);
   }
 
   .all-overview {
     display: grid;
     flex: 1 1 auto;
-    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-rows: 1fr auto;
     width: 100%;
-    min-height: 0;
   }
 
   .all-overview:has(.tour-cta) {
-    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto 1fr auto;
   }
 
   .all-overview__main {
-    height: 100%;
-    min-height: 0;
     gap: clamp(32px, 6.2vw, 92px);
     padding: 0 8px clamp(10px, 3.1svh, 28px);
   }
@@ -708,22 +646,6 @@ html[data-theme="dark"] .all-search-panel .result-card--aircad > span:last-child
     margin-top: clamp(9px, 1.7svh, 14px);
     font-size: clamp(15px, min(1.65vw, 2.65svh), 24px);
     line-height: 1.55;
-  }
-
-  .all-overview .ai-overview__skills {
-    gap: clamp(6px, 1svh, 8px);
-    margin-top: clamp(14px, 3svh, 27px);
-  }
-
-  .all-search-panel .all-overview .ai-overview__skill {
-    height: clamp(30px, 4.6svh, 38px);
-    padding-inline: clamp(9px, 1.4svh, 12px);
-    font-size: clamp(11px, 1.55svh, 12px);
-  }
-
-  .all-overview .ai-overview__skill-icon {
-    width: clamp(16px, 2.4svh, 19px);
-    height: clamp(16px, 2.4svh, 19px);
   }
 
   .all-project {
@@ -812,10 +734,6 @@ html[data-theme="dark"] .all-search-panel .result-card--aircad > span:last-child
     padding-bottom: clamp(8px, 2svh, 28px);
   }
 
-  .all-overview:has(.tour-cta) .ai-overview__skills {
-    margin-top: clamp(12px, 2.2svh, 27px);
-  }
-
   .all-overview:has(.tour-cta) .ai-overview__copy {
     margin-top: clamp(8px, 1.3svh, 14px);
   }
@@ -893,15 +811,6 @@ html[data-theme="dark"] .all-search-panel .result-card--aircad > span:last-child
     line-height: 1.45;
   }
 
-  .all-overview .ai-overview__skills {
-    margin-top: 10px;
-  }
-
-  .all-search-panel .all-overview .ai-overview__skill {
-    height: 28px;
-    font-size: 10.5px;
-  }
-
   .all-project {
     width: min(100%, 42svh);
   }
@@ -970,15 +879,6 @@ html[data-theme="dark"] .all-search-panel .result-card--aircad > span:last-child
     margin-top: 6px;
     font-size: 13.5px;
     line-height: 1.4;
-  }
-
-  .all-overview .ai-overview__skills {
-    margin-top: 7px;
-  }
-
-  .all-search-panel .all-overview .ai-overview__skill {
-    height: 26px;
-    font-size: 10px;
   }
 
   .all-project {
