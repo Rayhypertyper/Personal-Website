@@ -293,7 +293,7 @@ export function TourDemo({ source, active, paused, hidden, reducedMotion, stageR
         onPlay={() => { suppressPauseRef.current = false; syncProgress(true); if (active && paused && !hidden) onPauseChange(false); }} />
       <img ref={posterRef} className="guided-tour-video__poster" src={source.poster} alt="" aria-hidden="true" />
       {!standalone ? <i ref={progressRef} className="guided-tour-video__progress" aria-hidden="true" /> : null}
-      {hasCaption ? <p className="guided-tour-video__caption">Invisible Keyboard <span>demo</span></p> : null}
+      {hasCaption ? <p className="guided-tour-video__caption">Invisiboard <span>demo</span></p> : null}
       {children}
     </div>
   );

@@ -7,7 +7,7 @@ const KEYBOARD_CLIP: TourDemoSource = {
   stopId: "keyboard",
   src: "/invisible-keyboard-demo.mp4",
   poster: "/invisible-keyboard-intro-poster.jpg",
-  title: "Invisible Keyboard",
+  title: "Invisiboard",
   start: 44,
   end: 63,
   playbackRate: 1.65,

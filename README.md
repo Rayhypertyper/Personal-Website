@@ -5,7 +5,7 @@ A responsive React and TypeScript portfolio for Ray Xu, presented through an int
 ## Features
 
 - Search-style landing page with interactive portfolio filters.
-- Project showcase featuring Invisible Keyboard and AirCAD.
+- Project showcase featuring Invisiboard and AirCAD.
 - Experience timeline, about section, and Waterloo/Ottawa location globe.
 - Animated contact experience with local development preview and hosted email delivery.
 - Light and dark themes with responsive layouts and reduced-motion support.
@@ -120,17 +120,17 @@ and browser-specific verification limits.
 
 ## Production build
 
-`/keyboard` opens a muted, full-viewport Invisible Keyboard clip from 0:44 to
+`/keyboard` opens a muted, full-viewport Invisiboard clip from 0:44 to
 1:03 at 1.65× speed. It then uses the tour's zoom-out animation to reveal the
 Projects page at `/projects` and stops. Escape skips the clip; reduced motion
 returns directly without the zoom. Both routes have static entry documents for
 direct visits and refreshes on GitHub Pages.
 
-`/aircad` opens the AirCAD demo from 0:30.8–0:40 at normal speed with audio on,
+`/aircad` opens the AirCAD demo from 0:30.8–0:40 at normal speed, muted for autoplay,
 then zooms into its video card on `/projects` and stops. It has its own static
 entry document, supports Escape, and skips the zoom for reduced motion.
-Playback attempts to start with sound, without a button prompt or muted fallback.
-If the browser blocks autoplay with sound, the first tap or key press starts it with audio.
+The first tap or key press enables audio without restarting the clip. If the browser
+blocks muted autoplay too, that interaction starts playback with audio.
 
 ```bash
 npm run typecheck

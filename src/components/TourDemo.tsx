@@ -115,7 +115,7 @@ export function TourDemo({ source, active, paused, hidden, stageRef, finishingRe
           if (active && readyRef.current && !finishingRef.current && !video?.ended && !paused && !hidden) onPauseChange(true);
         }}
         onPlay={() => { if (active && paused && !hidden) onPauseChange(false); }} />
-      {hasCaption ? <p className="guided-tour-video__caption">Invisible Keyboard <span>demo</span></p> : null}
+      {hasCaption ? <p className="guided-tour-video__caption">Invisiboard <span>demo</span></p> : null}
       {children}
     </div>
   );

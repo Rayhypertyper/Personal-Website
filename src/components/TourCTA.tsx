@@ -1,4 +1,4 @@
-import { Send } from "lucide-react";
+import { Play } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from "react";
 import { createPortal } from "react-dom";
 import "../tour-cta.css";
@@ -26,7 +26,6 @@ export function TourCTA({ onStart, onVisibilityChange }: TourCTAProps) {
     const root = rootRef.current;
     if (!root || attentionPlayed) return;
     attentionPlayed = true;
-    root.dataset.attention = "true";
     setShade("on");
   }, []);
 
@@ -69,18 +68,34 @@ export function TourCTA({ onStart, onVisibilityChange }: TourCTAProps) {
 
   return (
     <section ref={rootRef} className="tour-cta" aria-labelledby="tour-cta-title" data-tour-cta-card>
-      <div className="tour-cta__copy">
-        <p className="tour-cta__lead">Sponsored result</p>
-        <p className="tour-cta__title" id="tour-cta-title">Get to know me in <em>30&nbsp;seconds</em>.</p>
-      </div>
-      <div className="tour-cta__action">
-        <button type="button" className="tour-cta__button" data-tour-cta="hero" data-tour-entry onClick={start} aria-describedby="tour-cta-title">
-          <span className="tour-cta__button-face">
-            <Send className="tour-cta__icon" size={28} aria-hidden="true" />
-            Start tour
+      <button
+        type="button"
+        className="tour-cta__button"
+        data-tour-cta="hero"
+        data-tour-entry
+        onClick={start}
+        aria-labelledby="tour-cta-action"
+        aria-describedby="tour-cta-title tour-cta-duration tour-cta-route"
+      >
+        <span className="tour-cta__ticket">
+          <span className="tour-cta__body">
+            <span className="tour-cta__stamp" id="tour-cta-duration">
+              <span className="tour-cta__number">30</span>{" "}
+              <span className="tour-cta__unit">seconds</span>
+            </span>
+            <span className="tour-cta__copy">
+              <span className="tour-cta__title" id="tour-cta-title">Get to know me.</span>
+              <span className="tour-cta__route" id="tour-cta-route">A tour of my projects and experience.</span>
+            </span>
           </span>
-        </button>
-      </div>
+          <span className="tour-cta__stub">
+            <span className="tour-cta__action" id="tour-cta-action">
+              <Play size={16} fill="currentColor" aria-hidden="true" />
+              Start tour
+            </span>
+          </span>
+        </span>
+      </button>
       {shade ? <TourCTAShade target={rootRef} state={shade} /> : null}
     </section>
   );
@@ -111,8 +126,8 @@ function TourCTAShade({ target, state }: { target: RefObject<HTMLElement | null>
       <defs>
         <filter id="tour-cta-shade-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6" /></filter>
         <mask id="tour-cta-shade-mask">
-          <rect width="100%" height="100%" fill="white" />
-          <rect ref={holeRef} rx={16 + SHADE_PADDING} fill="black" filter="url(#tour-cta-shade-soft)" />
+          <rect width="100%" height="100%" fill="var(--tour-mask-light)" />
+          <rect ref={holeRef} rx={8 + SHADE_PADDING} fill="var(--tour-mask-dark)" filter="url(#tour-cta-shade-soft)" />
         </mask>
       </defs>
       <rect width="100%" height="100%" fill="currentColor" mask="url(#tour-cta-shade-mask)" />

@@ -1,0 +1,13 @@
+{
+  "scanned": "2026-11-16",
+  "scope": "The guided-tour invitation at the top of the All view",
+  "findings": {
+    "framework": "Vite, React and TypeScript (package.json:7).",
+    "fonts": "The project bundles Polaris (styles.css:22) and Bookman-style italic (src/all-overview.css:3).",
+    "palette": "The All view has paper and ink tokens for light and dark surfaces (src/all-overview.css:27 and :403).",
+    "motion": "The first visit has a dismissible spotlight. The tour start and visibility observer belong to TourCTA.",
+    "spacing": "The All view reserves a content-sized row for the invitation (src/all-overview.css:686)."
+  },
+  "preserve": ["30-second duration", "Start tour", "analytics and focus hooks", "first-visit spotlight", "floating reminder", "completed-tour replay"],
+  "introduce": ["marigold admission ticket", "Bookman duration stamp", "perforated play stub", "one native button spanning the ticket"]
+}

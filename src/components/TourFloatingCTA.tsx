@@ -2,7 +2,7 @@ import { Play, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { TOUR_CTA_DURATION_SECONDS } from "../tour-config";
-import "../tour-cta.css";
+import "../tour-floating-cta.css";
 
 const SHOW_DELAY_MS = 1200; // a gentle follow-up, and it also swallows the first-paint flicker before IntersectionObserver reports the hero card
 const HIDE_MS = 220;

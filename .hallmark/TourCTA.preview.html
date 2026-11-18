@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tour ticket states</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/src/all-overview.css">
+  <style>
+    :root { --preview-ink: #302d2a; --preview-paper: #fdfcf9; --preview-rule: #e6e0d8; }
+    html, body { overflow-x: clip; }
+    body { color: var(--preview-ink); background: var(--preview-paper); }
+    main { max-width: 68rem; margin: auto; padding: 1.5rem; }
+    h1 { margin-block: 0 1rem; }
+    h2 { margin-block: 1.5rem .5rem; font-size: 1rem; }
+    p { max-width: 65ch; line-height: 1.5; }
+    dd { margin: .25rem 0 1.25rem; }
+    dt { font-weight: bold; }
+    a { text-decoration: underline; }
+    a:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+    dl { border-top: 1px solid var(--preview-rule); padding-top: 1.25rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Tour ticket states</h1>
+    <p>Appearance samples use the portfolio’s actual component. <a href="/">Start the working tour on the portfolio.</a></p>
+    <div id="samples"></div>
+    <dl>
+      <dt>Loading</dt><dd>The first stop opens locally and immediately. The ticket has no loading state.</dd>
+      <dt>Error</dt><dd>Starting the tour makes no request that can fail.</dd>
+      <dt>Success</dt><dd>The guided tour takes focus at its first stop. On completion, Replay replaces the ticket.</dd>
+    </dl>
+  </main>
+  <script type="module">
+    import { createElement } from "react";
+    import { renderToStaticMarkup } from "react-dom/server";
+    import { TourCTA } from "/src/components/TourCTA.tsx";
+
+    const markup = renderToStaticMarkup(createElement(TourCTA, { onStart() {} }));
+    const samples = document.getElementById("samples");
+    for (const [state, label] of Object.entries({
+      default: "Default", hover: "Hover", focus: "Keyboard focus", active: "Pressed", disabled: "Disabled (native)"
+    })) {
+      const title = document.createElement("h2");
+      title.textContent = label;
+      const sample = document.createElement("div");
+      sample.inert = true;
+      sample.innerHTML = markup.replace(/\btour-cta-(title|action|route|duration)\b/g, id => id + "-" + state);
+      const button = sample.querySelector("button");
+      if (state === "disabled") button.disabled = true;
+      else if (state !== "default") button.classList.add("is-" + state);
+      samples.append(title, sample);
+    }
+  </script>
+</body>
+</html>

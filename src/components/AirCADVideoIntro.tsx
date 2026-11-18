@@ -11,6 +11,7 @@ export function AirCADVideoIntro({ onComplete }: { onComplete: () => void }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const finishingRef = useRef(false);
   const awaitingGestureRef = useRef(true);
+  const [muted, setMuted] = useState(true);
   const [paused, setPaused] = useState(false);
   const [hidden, setHidden] = useState(() => document.hidden);
   const [reducedMotion, setReducedMotion] = useState(() => matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -46,8 +47,10 @@ export function AirCADVideoIntro({ onComplete }: { onComplete: () => void }) {
       if (!awaitingGestureRef.current || finishingRef.current) return;
       const video = stageRef.current?.querySelector("video");
       if (!video) return;
-      if (!video.paused) { awaitingGestureRef.current = false; return; }
+      // Unmute within the gesture, including when muted autoplay already succeeded.
       video.muted = false;
+      setMuted(false);
+      if (!video.paused) { awaitingGestureRef.current = false; return; }
       setPaused(false);
       void video.play().then(() => {
         awaitingGestureRef.current = false;
@@ -72,7 +75,7 @@ export function AirCADVideoIntro({ onComplete }: { onComplete: () => void }) {
   }, [finish, awaitPlaybackGesture]);
 
   return createPortal(
-    <TourDemo source={AIRCAD_INTRO} presentation="standalone" muted={false} active paused={paused} hidden={hidden}
+    <TourDemo source={AIRCAD_INTRO} presentation="standalone" muted={muted} active paused={paused} hidden={hidden}
       reducedMotion={reducedMotion} stageRef={stageRef} finishingRef={finishingRef}
       onPauseChange={setPaused} onFullscreenChange={ignore}
       onEntered={() => { delete document.documentElement.dataset.aircadIntro; }}

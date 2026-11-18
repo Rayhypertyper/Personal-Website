@@ -1,0 +1,149 @@
+.tour-float {
+  --float-muted: #736c65;
+  --float-button: #97462d;
+  --float-button-hover: #7e3924;
+  --float-ink: #fffefa;
+  --float-caption-bg: #fffefa;
+  --float-caption-line: #e6e0d8;
+  position: fixed;
+  z-index: 40;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  display: grid;
+  justify-items: end;
+  row-gap: 6px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  animation: tour-float-enter 360ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transition: opacity 200ms ease, transform 200ms ease, translate 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html[data-theme="dark"] .tour-float {
+  --float-muted: #a4b1c3;
+  --float-caption-bg: #111c2c;
+  --float-caption-line: #2a3748;
+}
+
+@keyframes tour-float-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+.tour-float[data-state="closing"] {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+.tour-float[data-dodge] {
+  translate: 0 -70px;
+}
+
+.tour-float__pill {
+  display: inline-flex;
+  align-items: stretch;
+  height: 48px;
+  border-radius: 24px;
+  background: var(--float-button);
+  color: var(--float-ink);
+  box-shadow: 0 10px 26px -12px rgba(48, 30, 22, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.tour-float__start {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px 0 18px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+
+.tour-float__start:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.tour-float__close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  border: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.22);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+
+.tour-float__close:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.tour-float button:focus-visible {
+  outline: 2px solid var(--float-ink);
+  outline-offset: -4px;
+  border-radius: 20px;
+}
+
+.tour-float__caption {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin: 0;
+  opacity: 0;
+  transition: grid-template-rows 240ms ease, opacity 240ms ease;
+}
+
+.tour-float__caption > span {
+  display: block;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 12px;
+  border: 0 solid var(--float-caption-line);
+  border-radius: 10px;
+  background: var(--float-caption-bg);
+  color: var(--float-muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 26px;
+}
+
+.tour-float:is(:hover, :focus-within) .tour-float__caption {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.tour-float:is(:hover, :focus-within) .tour-float__caption > span {
+  border-width: 1px;
+}
+
+@media (max-width: 639px) {
+  .tour-float__caption {
+    display: none;
+  }
+
+  .tour-float__pill {
+    height: 46px;
+  }
+
+  .tour-float__start {
+    padding-inline: 14px 12px;
+  }
+
+  .tour-float__close {
+    width: 42px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-float,
+  .tour-float * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -67,7 +67,7 @@ export function ProjectsShowcase() {
             </span>
           </div>
           <div className="projects-feature__title-row">
-            <h2 data-tour-focus-block="keyboard-intro"><TourPageText>Invisible Keyboard</TourPageText></h2>
+            <h2 data-tour-focus-block="keyboard-intro"><TourPageText>Invisiboard</TourPageText></h2>
             <Settings className="projects-feature__settings" size={48} strokeWidth={1.5} aria-hidden="true" />
           </div>
           <p data-tour-focus-block="keyboard-intro"><TourPageText cps={20} endCps={36} holdMs={200}>An end-to-end machine learning system that <strong>detects and recognizes keystrokes using a webcam</strong></TourPageText></p>
@@ -81,7 +81,7 @@ export function ProjectsShowcase() {
               type="button"
               className="projects-feature__button"
               onClick={() => playProjectFullscreen(videoRef.current)}
-              aria-label="Play Invisible Keyboard project demo in fullscreen"
+              aria-label="Play Invisiboard project demo in fullscreen"
             >
               <span className="projects-green-arrow" aria-hidden="true" />
               View Project <ArrowRight size={16} />
@@ -91,7 +91,7 @@ export function ProjectsShowcase() {
               target="_blank"
               rel="noreferrer"
               className="projects-feature__github"
-              aria-label="Open Invisible Keyboard project on GitHub"
+              aria-label="Open Invisiboard project on GitHub"
             >
               <img src="/github-logo.png" alt="" aria-hidden="true" />
               <span>GitHub</span>
@@ -110,7 +110,7 @@ export function ProjectsShowcase() {
               playsInline
               preload="metadata"
               poster="/invisible-keyboard-demo-poster.jpg"
-              aria-label="Invisible Keyboard project demo"
+              aria-label="Invisiboard project demo"
             >
               <source src="/invisible-keyboard-demo.mp4" type="video/mp4" />
               Your browser does not support embedded video.

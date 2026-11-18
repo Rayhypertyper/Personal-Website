@@ -37,7 +37,7 @@ export const TOUR_STOPS = [
     id: "keyboard",
     estimatedMs: 15800,
     filter: "Projects",
-    title: "Invisible Keyboard",
+    title: "Invisiboard",
     query: "projects",
     videoStart: 50,
     videoEnd: 57,

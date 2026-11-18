@@ -27,6 +27,7 @@ export function AllOverview({ onProjectsClick, onTourStart, onTourCtaVisibilityC
           <div data-tour-target="identity" data-tour-focus-block="identity">
             <h1 className="all-overview__name">Ray Xu</h1>
             <p className="all-overview__subtitle"><TourPageText>Computer Science @ University of Waterloo</TourPageText></p>
+            <p className="all-overview__availability">Seeking 2027 summer internships</p>
           </div>
           <AISummary />
           {tourCompleted ? (
@@ -50,7 +51,7 @@ export function AllOverview({ onProjectsClick, onTourStart, onTourCtaVisibilityC
             className="all-project__preview"
             type="button"
             onClick={openProjects}
-            aria-label="Explore the Invisible Keyboard project"
+            aria-label="Explore the Invisiboard project"
           >
             <img
               src="/invisible-keyboard-demo-poster.jpg"
@@ -61,7 +62,7 @@ export function AllOverview({ onProjectsClick, onTourStart, onTourCtaVisibilityC
             />
           </button>
           <div className="all-project__details">
-            <h2 id="all-project-title">Invisible Keyboard</h2>
+            <h2 id="all-project-title">Invisiboard</h2>
             <p>
               An end-to-end machine learning system that <strong>detects and recognizes
               keystrokes using a webcam</strong>

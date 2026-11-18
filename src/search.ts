@@ -28,13 +28,13 @@ const SEARCH_ENTRIES: readonly SearchEntry[] = [
     filter: "Projects",
     title: "Projects",
     description:
-      "Invisible Keyboard and AirCAD: computer vision, deep learning, and spatial 3D design.",
+      "Invisiboard and AirCAD: computer vision, deep learning, and spatial 3D design.",
     keywords: [
       "project",
       "projects",
       "build",
       "builds",
-      "invisible keyboard",
+      "invisiboard",
       "keyboard",
       "aircad",
       "air cad",

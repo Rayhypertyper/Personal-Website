@@ -9,12 +9,12 @@ type OverviewToken = {
 };
 
 const OVERVIEW_TOKENS: readonly OverviewToken[] = [
-  { text: "I build software that connects ", strong: false },
-  { text: "computer vision", strong: true },
+  { text: "I build ", strong: false },
+  { text: "backends", strong: true },
   { text: ", ", strong: false },
-  { text: "ML", strong: true },
-  { text: ", and the ", strong: false },
-  { text: "physical world", strong: true },
+  { text: "computer vision", strong: true },
+  { text: " and ", strong: false },
+  { text: "machine learning systems", strong: true },
   { text: ".", strong: false },
 ];
 
